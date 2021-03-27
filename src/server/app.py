@@ -47,7 +47,6 @@ class Sentence(db.Model):
 class TranslatedWord(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(100), nullable=False)
-    tatoeba_id = db.Column(db.Integer, nullable=False)
     word_id = db.Column(db.Integer, db.ForeignKey(
         'word.id'), nullable=False)
     language_id = db.Column(db.Integer, db.ForeignKey(
