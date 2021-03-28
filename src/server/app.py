@@ -41,7 +41,7 @@ class Sentence(db.Model):
     word = db.relationship('Word', backref='sentences', lazy=True)
 
     def __repr__(self):
-        return '<Sentence %r>' % self.text[:15]
+        return '<Sentence %r...>' % self.text[:15]
 
 
 class TranslatedWord(db.Model):
@@ -72,7 +72,7 @@ class TranslatedSentence(db.Model):
     sentence = db.relationship('Sentence', backref='translations', lazy=True)
 
     def __repr__(self):
-        return '<TranslatedSentence %r>' % self.text[:15]
+        return '<TranslatedSentence %r...>' % self.text[:15]
 
 
 if __name__ == "__main__":
