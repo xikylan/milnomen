@@ -1,5 +1,4 @@
 from app import Language, Word, Sentence, TranslatedWord, TranslatedSentence, db
-from parse_tsv import parse_tsv
 import translators as ts
 import csv
 
@@ -8,43 +7,85 @@ code = 'es'
 src = 'spanish'
 dest = 'english'
 
-# english = Language(code='en', name=dest)
 
-# new_language = Language(code=code, name=src)
-# db.session.add(new_language)
-# db.session.commit()
+def main(words_file):
+    english = add_new_lang(code='en', name='english')
+    spanish = add_new_lang(code='es', name='spanish')
+    parse_words_txt(
+        words_file=words_file,
+        src_lang=spanish,
+        dest_lang=english,
+        amount=1000
+    )
 
-language = Language.query.filter_by(name=src).first()
 
-with open(filename, 'r') as file:
-    for word in file:
-        word = word.rstrip()
+def add_new_lang(code, name):
+    new_lang = Language(code=code, name=name)
+    db.session.add(new_lang)
+    db.session.commit()
 
-        # add new word
-        # new_word = Word(text=word, language=language)
-        # db.session.add(new_word)
-        # db.session.commit()
+    # return language query object
+    return Language.query.filter_by(code=code).first()
 
-        # get translations list
-        # try:
-        #     translations = ts.google(
-        #         word, from_language=code, is_detail_result=True, sleep_seconds=0.075)[1][0][0][-1][0][-1]
 
-        #     # add new TranslatedWord for each translation
-        #     for trans in translations:
-        #         original = Word.query.filter_by(
-        #             language=language, text=word).first()
-        #         lang = Language.query.filter_by(name=dest).first()
-        #         new_trans = TranslatedWord(
-        #             word=original, language=lang, text=trans.lower())
-        #         db.session.add(new_trans)
-        #         db.session.commit()
-        # except Exception as e:
-        #     print('Word', word, 'encountered error while translating')
-        #     print("Error:", e)
-        #     continue
+def parse_words_txt(words_file, src_lang, dest_lang, amount):
+    count = 0
+    with open(words_file, 'r') as file:
+        for line in file:
+            if count >= amount:
+                return True
 
-        # parse tsv file with sentences
-        current_word = Word.query.filter_by(
-            text=word, language=language).first()
-        parse_tsv(current_word, 'es.tsv', language)
+            split = line.split(' ')
+            word = split[0]
+            frequency = split[1]
+
+            # add word and translations
+            add_word(word=word, language=src_lang, freq=frequency)
+            add_word_translations(
+                word=word,
+                src_lang=src_lang,
+                dest_lang=dest_lang
+            )
+
+            count += 1
+
+
+def add_word(word, language, freq):
+    new_word = Word(text=word, language=language, frequency=freq)
+    db.session.add(new_word)
+    db.session.commit()
+
+
+def add_word_translations(word, src_lang, dest_lang):
+    # get translations list
+    try:
+        # call translate api
+        translations = ts.google(
+            word,
+            from_language=src_lang.code,
+            is_detail_result=True,
+            sleep_seconds=0.075
+        )[1][0][0][-1][0][-1]
+
+        # add new TranslatedWord for each translation
+        for trans in translations:
+            # get original word
+            original = Word.query.filter_by(
+                text=word,
+                language=src_lang
+            ).first()
+            # create TranslatedWord
+            new_trans = TranslatedWord(
+                word=original,
+                language=dest_lang,
+                text=trans.lower()
+            )
+
+            db.session.add(new_trans)
+            db.session.commit()
+    except Exception as e:
+        print('Word', word, 'encountered error while translating')
+        print("Error:", e)
+
+
+main('es.txt')
