@@ -1,21 +1,25 @@
 from app import Language, Word, Sentence, TranslatedWord, TranslatedSentence, db
+import time
 import translators as ts
 import csv
 
-filename = 'top_es.txt'
-code = 'es'
-src = 'spanish'
-dest = 'english'
 
-
-def main(words_file):
-    english = add_new_lang(code='en', name='english')
-    spanish = add_new_lang(code='es', name='spanish')
-    parse_words_txt(
-        words_file=words_file,
+def main(words_file, sentences_file):
+    # english = add_new_lang(code='en', name='english')
+    # spanish = add_new_lang(code='es', name='spanish')
+    # parse_words_txt(
+    #     words_file=words_file,
+    #     src_lang=spanish,
+    #     dest_lang=english,
+    #     max=1000
+    # )
+    spanish = Language.query.filter_by(code='es').first()
+    english = Language.query.filter_by(code='en').first()
+    parse_sentences_tsv(
+        sentences_file=sentences_file,
         src_lang=spanish,
         dest_lang=english,
-        amount=1000
+        max=100
     )
 
 
@@ -28,11 +32,12 @@ def add_new_lang(code, name):
     return Language.query.filter_by(code=code).first()
 
 
-def parse_words_txt(words_file, src_lang, dest_lang, amount):
+def parse_words_txt(words_file, src_lang, dest_lang, max):
     count = 0
+    start = time.time()
     with open(words_file, 'r') as file:
         for line in file:
-            if count >= amount:
+            if count >= max:
                 return True
 
             split = line.split(' ')
@@ -48,12 +53,16 @@ def parse_words_txt(words_file, src_lang, dest_lang, amount):
             )
 
             count += 1
+    end = time.time()
+    print("Parsing words took", end - start, "seconds")
+    return True
 
 
 def add_word(word, language, freq):
     new_word = Word(text=word, language=language, frequency=freq)
     db.session.add(new_word)
     db.session.commit()
+    return True
 
 
 def add_word_translations(word, src_lang, dest_lang):
@@ -86,6 +95,72 @@ def add_word_translations(word, src_lang, dest_lang):
     except Exception as e:
         print('Word', word, 'encountered error while translating')
         print("Error:", e)
+    return True
 
 
-main('es.txt')
+def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
+    top_words = Word.query.filter_by(
+        language=src_lang).order_by(Word.frequency.desc()).all()
+
+    start = time.time()
+    with open(sentences_file, 'r') as file:
+        tsv = csv.reader(file, delimiter='\t')
+
+        for word in top_words:
+            # goto top of file
+            file.seek(0)
+            num_sentences = 0
+
+            for sentence_pair in tsv:
+                # exit if max sentences reached
+                if num_sentences >= max:
+                    break
+
+                # grab sentence text
+                sentence_text = sentence_pair[1]
+                text_split = sentence_text.split(' ')
+
+                # if sentence of len 10 contains this top word
+                if len(text_split) <= 10 and word.text in text_split:
+                    try:
+                        id = sentence_pair[0]
+                        trans_id = sentence_pair[2]
+                        trans_sentence = sentence_pair[3]
+
+                        # add new sentence
+                        new_sentence = Sentence(
+                            text=sentence_text,
+                            tatoeba_id=id,
+                            word=word
+                        )
+                        db.session.add(new_sentence)
+                        db.session.commit()
+
+                        # increment number of sentences
+                        num_sentences += 1
+
+                        # add translated sentence
+                        original_sentence = Sentence.query.filter_by(
+                            tatoeba_id=id).first()
+
+                        new_translated_sentence = TranslatedSentence(
+                            text=trans_sentence,
+                            tatoeba_id=trans_id,
+                            language=dest_lang,
+                            sentence=original_sentence
+                        )
+                        db.session.add(new_translated_sentence)
+                        db.session.commit()
+
+                    except Exception as e:
+                        print("id", id, "trans_id", trans_id,
+                              "encountered an error")
+                        print(e)
+                        continue
+
+        end = time.time()
+        print("Parsing sentences took",
+              (end - start) / 60, "minutes")
+
+
+# main('es.txt', 'es.tsv')
