@@ -1,4 +1,3 @@
-from os import sep
 from app import Language, Word, Sentence, TranslatedWord, TranslatedSentence, db
 import time
 import translators as ts
