@@ -1,3 +1,4 @@
+from os import sep
 from app import Language, Word, Sentence, TranslatedWord, TranslatedSentence, db
 import time
 import translators as ts
@@ -92,9 +93,11 @@ def add_word_translations(word, src_lang, dest_lang):
 
             db.session.add(new_trans)
             db.session.commit()
+
     except Exception as e:
         print('Word', word, 'encountered error while translating')
         print("Error:", e)
+
     return True
 
 
@@ -103,6 +106,7 @@ def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
         language=src_lang).order_by(Word.frequency.desc()).all()
 
     start = time.time()
+
     with open(sentences_file, 'r') as file:
         tsv = csv.reader(file, delimiter='\t')
 
@@ -123,37 +127,23 @@ def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
                 # if sentence of len 10 contains this top word
                 if len(text_split) <= 10 and contains_word(text_split, word.text):
                     try:
-                        id = sentence_pair[0]
-                        trans_id = sentence_pair[2]
-                        trans_sentence = sentence_pair[3]
 
-                        # add new sentence
-                        new_sentence = Sentence(
-                            text=sentence_text,
-                            tatoeba_id=id,
+                        # add sentence + translation
+                        add_sentence(
+                            sentence_pair=sentence_pair,
                             word=word
                         )
-                        db.session.add(new_sentence)
-                        db.session.commit()
+
+                        add_sentence_translation(
+                            sentence_pair=sentence_pair,
+                            dest_lang=dest_lang
+                        )
 
                         # increment number of sentences
                         num_sentences += 1
 
-                        # add translated sentence
-                        original_sentence = Sentence.query.filter_by(
-                            tatoeba_id=id).first()
-
-                        new_translated_sentence = TranslatedSentence(
-                            text=trans_sentence,
-                            tatoeba_id=trans_id,
-                            language=dest_lang,
-                            sentence=original_sentence
-                        )
-                        db.session.add(new_translated_sentence)
-                        db.session.commit()
-
                     except Exception as e:
-                        print("id", id, "trans_id", trans_id,
+                        print("id", sentence_pair[0], "trans_id", sentence_pair[2],
                               "encountered an error")
                         print(e)
                         continue
@@ -161,6 +151,39 @@ def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
         end = time.time()
         print("Parsing sentences took",
               (end - start) / 60, "minutes")
+
+
+def add_sentence(sentence_pair, word):
+    id = sentence_pair[0]
+    text = sentence_pair[1]
+
+    # add new sentence
+    new_sentence = Sentence(
+        text=text,
+        tatoeba_id=id,
+        word=word
+    )
+    db.session.add(new_sentence)
+    db.session.commit()
+
+
+def add_sentence_translation(sentence_pair, dest_lang):
+    id = sentence_pair[0]
+    trans_id = sentence_pair[2]
+    trans_sentence = sentence_pair[3]
+
+    # add translated sentence
+    original_sentence = Sentence.query.filter_by(
+        tatoeba_id=id).first()
+
+    new_translated_sentence = TranslatedSentence(
+        text=trans_sentence,
+        tatoeba_id=trans_id,
+        language=dest_lang,
+        sentence=original_sentence
+    )
+    db.session.add(new_translated_sentence)
+    db.session.commit()
 
 
 def contains_word(arr, word):
