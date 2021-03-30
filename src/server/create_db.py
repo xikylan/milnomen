@@ -121,7 +121,7 @@ def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
                 text_split = sentence_text.split(' ')
 
                 # if sentence of len 10 contains this top word
-                if len(text_split) <= 10 and word.text in text_split:
+                if len(text_split) <= 10 and contains_word(text_split, word.text):
                     try:
                         id = sentence_pair[0]
                         trans_id = sentence_pair[2]
@@ -161,6 +161,13 @@ def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
         end = time.time()
         print("Parsing sentences took",
               (end - start) / 60, "minutes")
+
+
+def contains_word(arr, word):
+    for token in arr:
+        if token == word:
+            return True
+    return False
 
 
 # main('es.txt', 'es.tsv')
