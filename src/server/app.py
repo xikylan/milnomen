@@ -31,7 +31,7 @@ def hello():
             },
             'translation': {
                 'language': trans_lang.code,
-                'tatoeba_id': s.tatoeba_id,
+                'tatoeba_id': translation.tatoeba_id,
                 'text': translation.text,
             }}
 
