@@ -169,9 +169,6 @@ def add_sentence(sentence_pair, word):
         db.session.add(new_sentence)
         db.session.commit()
 
-    else:
-        print("Sentence '", exists.text[:15], "...' already exists")
-
 
 def add_sentence_translation(sentence_pair, dest_lang):
     id = sentence_pair[0]
