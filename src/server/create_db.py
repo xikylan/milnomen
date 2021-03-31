@@ -194,8 +194,12 @@ def add_sentence_translation(sentence_pair, dest_lang):
 
 def contains_word(arr, word):
     for token in arr:
-        if token == word:
+        if not token.isalpha():
+            token = "".join(ch for ch in token if ch.isalpha())
+
+        if token.lower() == word:
             return True
+
     return False
 
 
