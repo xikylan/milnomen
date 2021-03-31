@@ -1,14 +1,16 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+# from flask_cors import CORS
 import random
 
 app = Flask(__name__)
+# CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-@app.route('/')
+@app.route('/api/test')
 def hello():
     word = random.choice(Word.query.all())
     sentences = word.sentences
