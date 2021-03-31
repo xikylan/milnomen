@@ -47,6 +47,7 @@ def hello():
                 'text': word.text,
                 'frequency': word.frequency,
                 'language': language.code,
+                'translations': [tr.text for tr in word.translations]
             },
             'sentences': [sd for sd in sentence_data]
         }

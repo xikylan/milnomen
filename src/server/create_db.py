@@ -128,15 +128,16 @@ def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
                     try:
 
                         # add sentence + translation
-                        add_sentence(
+                        new_sentence = add_sentence(
                             sentence_pair=sentence_pair,
                             word=word
                         )
 
-                        add_sentence_translation(
-                            sentence_pair=sentence_pair,
-                            dest_lang=dest_lang
-                        )
+                        if new_sentence:
+                            add_sentence_translation(
+                                sentence_pair=sentence_pair,
+                                dest_lang=dest_lang
+                            )
 
                         # increment number of sentences
                         num_sentences += 1
@@ -169,6 +170,10 @@ def add_sentence(sentence_pair, word):
         db.session.add(new_sentence)
         db.session.commit()
 
+        return True
+
+    return False
+
 
 def add_sentence_translation(sentence_pair, dest_lang):
     id = sentence_pair[0]
@@ -190,11 +195,14 @@ def add_sentence_translation(sentence_pair, dest_lang):
 
 
 def contains_word(arr, word):
+    word = "".join(ch for ch in word if ch.isalpha()).lower()
     for token in arr:
-        if not token.isalpha():
-            token = "".join(ch for ch in token if ch.isalpha())
+        clean_token = token
 
-        if token.lower() == word:
+        if not token.isalpha():
+            clean_token = "".join(ch for ch in token if ch.isalpha())
+
+        if clean_token.lower() == word:
             return True
 
     return False
