@@ -156,14 +156,21 @@ def add_sentence(sentence_pair, word):
     id = sentence_pair[0]
     text = sentence_pair[1]
 
-    # add new sentence
-    new_sentence = Sentence(
-        text=text,
-        tatoeba_id=id,
-        word=word
-    )
-    db.session.add(new_sentence)
-    db.session.commit()
+    # check if sentence already exists in db
+    exists = Sentence.query.filter_by(tatoeba_id=id).first()
+
+    if not exists:
+        # add new sentence
+        new_sentence = Sentence(
+            text=text,
+            tatoeba_id=id,
+            word=word
+        )
+        db.session.add(new_sentence)
+        db.session.commit()
+
+    else:
+        print("Sentence '", exists.text[:15], "...' already exists")
 
 
 def add_sentence_translation(sentence_pair, dest_lang):
@@ -192,4 +199,4 @@ def contains_word(arr, word):
     return False
 
 
-# main('es.txt', 'es.tsv')
+main('es.txt', 'es.tsv')
