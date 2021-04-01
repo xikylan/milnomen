@@ -74,7 +74,13 @@ def add_word_translations(word, src_lang, dest_lang):
             from_language=src_lang.code,
             is_detail_result=True,
             sleep_seconds=0.075
-        )[1][0][0][-1][0][-1]
+        )[1][0][0]
+
+        # avoid google translate api format
+        if translations[-1] == src_lang.code:
+            translations = translations[-2][0][-1]
+        else:
+            translations = translations[-1][0][-1]
 
         # add new TranslatedWord for each translation
         for trans in translations:
@@ -138,9 +144,8 @@ def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
                                 sentence_pair=sentence_pair,
                                 dest_lang=dest_lang
                             )
-
-                        # increment number of sentences
-                        num_sentences += 1
+                            # increment number of sentences only if new one is added
+                            num_sentences += 1
 
                     except Exception as e:
                         print("id", sentence_pair[0], "trans_id", sentence_pair[2],
