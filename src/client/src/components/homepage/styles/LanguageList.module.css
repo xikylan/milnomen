@@ -1,0 +1,15 @@
+.heading {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.langlist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.langtext {
+  text-align: center;
+}

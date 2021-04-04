@@ -2,14 +2,14 @@ import React from "react";
 
 import NavigationBar from "./homepage/NavigationBar";
 import JumboHeader from "./homepage/JumboHeader";
-import ChooseLanguage from "./homepage/ChooseLanguage";
+import LanguageList from "./homepage/LanguageList";
 
 export default function HomePage() {
   return (
     <>
       <NavigationBar />
       <JumboHeader />
-      <ChooseLanguage />
+      <LanguageList />
     </>
   );
 }

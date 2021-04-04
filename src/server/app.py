@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 # from flask_cors import CORS
 import random
@@ -8,6 +8,35 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+
+@app.route('/api/<lang_code>/words')
+def get_words(lang_code):
+    # query from db
+    language = Language.query.filter_by(code=lang_code).first()
+    words = Word.query.filter_by(language=language).all()
+
+    # format dict
+
+    words_data = []
+    rank = 1
+    for word in words:
+        word_info = {
+            'rank': rank,
+            'text': word.text,
+            'translations': [wt.text for wt in word.translations]
+        }
+        words_data.append(word_info)
+        rank += 1
+
+    response = {
+        'data': {
+            'count': len(words_data),
+            'words': [wd for wd in words_data]
+        }
+    }
+
+    return jsonify(response)
 
 
 @app.route('/api/test')

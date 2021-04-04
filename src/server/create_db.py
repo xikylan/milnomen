@@ -19,7 +19,7 @@ def main(words_file, sentences_file):
         sentences_file=sentences_file,
         src_lang=spanish,
         dest_lang=english,
-        max=100
+        max=120
     )
 
 
@@ -76,7 +76,7 @@ def add_word_translations(word, src_lang, dest_lang):
             sleep_seconds=0.075
         )[1][0][0]
 
-        # avoid google translate api format
+        # avoid google translate api bad format
         if translations[-1] == src_lang.code:
             translations = translations[-2][0][-1]
         else:
@@ -84,12 +84,18 @@ def add_word_translations(word, src_lang, dest_lang):
 
         # add new TranslatedWord for each translation
         for trans in translations:
+
+            # avoid bad translations
+            if not trans.isalpha():
+                break
+
             # get original word
             original = Word.query.filter_by(
                 text=word,
                 language=src_lang
             ).first()
             # create TranslatedWord
+
             new_trans = TranslatedWord(
                 word=original,
                 language=dest_lang,

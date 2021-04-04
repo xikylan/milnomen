@@ -1,0 +1,44 @@
+@media screen and (max-width: 499px) {
+  .tablebody td {
+    font-size: 0.8rem;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .tablebody td {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 499px) {
+  .studybtn {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .studybtn {
+    width: 10vw;
+  }
+}
+.jumbo {
+  margin-bottom: 10px;
+}
+
+.jumbo h1 {
+  font-weight: bold;
+}
+
+.jumbo p {
+  font-size: 1rem;
+}
+
+.studycontainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.studybtn {
+  margin-top: 20px;
+}
