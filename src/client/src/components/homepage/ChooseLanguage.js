@@ -2,37 +2,21 @@ import React from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { ReactComponent as SpainLogo } from "../../assets/spain.svg";
 import { ReactComponent as FranceLogo } from "../../assets/france.svg";
+import styles from "./styles/ChooseLanguage.module.css";
+
+import LanguageButton from "./LanguageButton";
 
 export default function ChooseLanguage() {
   return (
-    <div style={{ backgroundColor: "#f8f8f8" }}>
+    <div className={styles.container}>
       <Container>
-        <p
-          style={{
-            textAlign: "center",
-            fontSize: 25,
-            marginBottom: 60,
-            paddingTop: "1rem",
-          }}
-        >
-          Choose a language
-        </p>
+        <p className={styles.heading}>Choose a language</p>
       </Container>
 
       <Container>
         <Row>
           <Col>
-            <Button
-              expand="lg"
-              variant="light"
-              style={{
-                height: 120,
-                width: 120,
-              }}
-            >
-              <SpainLogo style={{ width: "60%", height: "60%", margin: 10 }} />
-              <p>Spanish</p>
-            </Button>
+            <LanguageButton name="prague" />
           </Col>
           <Col>
             <Button
