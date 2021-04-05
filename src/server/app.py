@@ -10,10 +10,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-@app.route('/api/<lang_code>/words')
-def get_words(lang_code):
+@app.route('/api/<src_lang>/words')
+def get_words(src_lang):
     # query from db
-    language = Language.query.filter_by(code=lang_code).first()
+    language = Language.query.filter_by(name=src_lang).first()
     words = Word.query.filter_by(language=language).all()
 
     # format dict

@@ -1,0 +1,21 @@
+.studycontainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.tableheader th:first-letter {
+  text-transform: capitalize;
+}
+
+@media screen and (max-width: 499px) {
+  .tablebody td {
+    font-size: 0.8rem;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .tablebody td {
+    font-size: 1rem;
+  }
+}

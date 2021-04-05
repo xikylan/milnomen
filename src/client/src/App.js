@@ -13,6 +13,9 @@ function App() {
         <Route path="/es">
           <SpanishPage />
         </Route>
+        <Route path="es/study">
+          <SpanishSentencePage />
+        </Route>
       </Switch>
     </Router>
   );
