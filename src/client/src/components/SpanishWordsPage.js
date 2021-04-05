@@ -1,8 +1,8 @@
 import React from "react";
 
 import NavigationBar from "./NavigationBar";
-import JumboHeader from "./wordtablepage/JumboHeader";
-import WordTable from "./wordtablepage/WordTable";
+import JumboHeader from "./wordspage/JumboHeader";
+import WordTable from "./wordspage/WordTable";
 
 export default function SpanishWordsPage() {
   return (

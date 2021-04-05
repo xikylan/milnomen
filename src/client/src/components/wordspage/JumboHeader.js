@@ -9,9 +9,9 @@ export default function JumboHeader({ srcLang, destLang }) {
       <Container className={styles.textcontainer}>
         <h1>Top 1000 {srcLang} words</h1>
         <p>Source: Open Subtitles 2018</p>
-        <Button className={styles.studybtn} as={Link} to="/es/study">
-          Study list
-        </Button>
+        <Link to="/es/study">
+          <Button className={styles.studybtn}>Study list</Button>
+        </Link>
       </Container>
     </Jumbotron>
   );
