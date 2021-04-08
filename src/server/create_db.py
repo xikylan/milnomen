@@ -53,6 +53,7 @@ def add_new_lang(code, name):
 def parse_words_txt(words_file, src_lang, dest_lang, max):
     count = 0
     start = time.time()
+
     with open(words_file, 'r') as file:
         for line in file:
             # exit if max words reached
@@ -96,7 +97,7 @@ def add_word_translations(word, src_lang, dest_lang):
             word.text,
             from_language=src_lang.code,
             is_detail_result=True,
-            sleep_seconds=0.075
+            sleep_seconds=0.01
         )[1][0][0]
 
     except Exception as e:
@@ -106,24 +107,14 @@ def add_word_translations(word, src_lang, dest_lang):
 
     # avoid google translate api bad format
     if translations[-1] == src_lang.code:
-        db.session.delete(
-            Word.query.filter_by(id=word.id).first()
-        )
-        db.session.commit()
+        remove_word(word)
         return
 
     translations = translations[-1][0][1]
 
-    # if translations[-1] == word.text:
-    #     db.session.delete(word)
-    #     print("Deleting invalid word", word)
-    #     return
+    num_trans = 0
 
-    # add new TranslatedWord for each translation
     for trans in translations:
-
-        # if trans in ['george', 'joe', 'frank', 'tom', 'sam', 'john', 'david', 'michael', 'ah', 'ok', 'eh', 'dr', 'oh', "hey"]:
-        #     continue
         if is_clean_trans(trans, word.text):
             new_trans = TranslatedWord(
                 word=word,
@@ -134,6 +125,20 @@ def add_word_translations(word, src_lang, dest_lang):
             db.session.add(new_trans)
             db.session.commit()
 
+            num_trans += 1
+
+    # if no good translations, then delete bad word from db
+    if num_trans == 0:
+        remove_word(word)
+
+    return True
+
+
+def remove_word(word):
+    db.session.delete(
+        Word.query.filter_by(id=word.id).first()
+    )
+    db.session.commit()
     return True
 
 
