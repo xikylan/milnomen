@@ -41,8 +41,8 @@ def get_words(src_lang):
 
 @app.route('/api/test')
 def hello():
-    # word = random.choice(Word.query.all())
-    word = Word.query.filter_by(text='de').first()
+    word = random.choice(Word.query.all())
+    # word = Word.query.filter_by(text='de').first()
     sentences = word.sentences
     language = Language.query.filter_by(id=word.language_id).first()
 

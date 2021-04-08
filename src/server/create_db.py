@@ -7,20 +7,38 @@ import csv
 def main(words_file, sentences_file):
     # english = add_new_lang(code='en', name='english')
     # spanish = add_new_lang(code='es', name='spanish')
-    # parse_words_txt(
-    #     words_file=words_file,
-    #     src_lang=spanish,
-    #     dest_lang=english,
-    #     max=1000
-    # )
     spanish = Language.query.filter_by(code='es').first()
     english = Language.query.filter_by(code='en').first()
-    parse_sentences_tsv(
-        sentences_file=sentences_file,
+
+    clear_words()
+    parse_words_txt(
+        words_file=words_file,
         src_lang=spanish,
         dest_lang=english,
-        max=120
+        max=1050
     )
+
+    # spanish = Language.query.filter_by(code='es').first()
+    # english = Language.query.filter_by(code='en').first()
+    # clear_sentences()
+    # parse_sentences_tsv(
+    #     sentences_file=sentences_file,
+    #     src_lang=spanish,
+    #     dest_lang=english,
+    #     max=120
+    # )
+
+
+def clear_words():
+    print("Deleting", Word.query.delete(), "words")
+    print("Deleting", TranslatedWord.query.delete(), "translated words")
+    db.session.commit()
+
+
+def clear_sentences():
+    print("Deleting", Sentence.query.delete(), "sentences")
+    print("Deleting", TranslatedSentence.query.delete(), "translated sentences")
+    db.session.commit()
 
 
 def add_new_lang(code, name):
@@ -37,22 +55,26 @@ def parse_words_txt(words_file, src_lang, dest_lang, max):
     start = time.time()
     with open(words_file, 'r') as file:
         for line in file:
+            # exit if max words reached
             if count >= max:
                 return True
 
-            split = line.split(' ')
-            word = split[0]
-            frequency = split[1]
+            word, frequency = line.split(' ')
+
+            # continue if non-alpha word
+            if not word.isalpha():
+                continue
 
             # add word and translations
-            add_word(word=word, language=src_lang, freq=frequency)
+            new_word = add_word(word=word, language=src_lang, freq=frequency)
             add_word_translations(
-                word=word,
+                word=new_word,
                 src_lang=src_lang,
                 dest_lang=dest_lang
             )
 
             count += 1
+
     end = time.time()
     print("Parsing words took", end - start, "seconds")
     return True
@@ -62,7 +84,8 @@ def add_word(word, language, freq):
     new_word = Word(text=word, language=language, frequency=freq)
     db.session.add(new_word)
     db.session.commit()
-    return True
+
+    return Word.query.filter_by(language=language, text=word).first()
 
 
 def add_word_translations(word, src_lang, dest_lang):
@@ -70,34 +93,40 @@ def add_word_translations(word, src_lang, dest_lang):
     try:
         # call translate api
         translations = ts.google(
-            word,
+            word.text,
             from_language=src_lang.code,
             is_detail_result=True,
             sleep_seconds=0.075
         )[1][0][0]
 
-        # avoid google translate api bad format
-        if translations[-1] == src_lang.code:
-            translations = translations[-2][0][-1]
-        else:
-            translations = translations[-1][0][-1]
+    except Exception as e:
+        print('Word', word, 'encountered error while translating')
+        print(e)
+        return
 
-        # add new TranslatedWord for each translation
-        for trans in translations:
+    # avoid google translate api bad format
+    if translations[-1] == src_lang.code:
+        db.session.delete(
+            Word.query.filter_by(id=word.id).first()
+        )
+        db.session.commit()
+        return
 
-            # avoid bad translations
-            if not trans.isalpha():
-                break
+    translations = translations[-1][0][1]
 
-            # get original word
-            original = Word.query.filter_by(
-                text=word,
-                language=src_lang
-            ).first()
-            # create TranslatedWord
+    # if translations[-1] == word.text:
+    #     db.session.delete(word)
+    #     print("Deleting invalid word", word)
+    #     return
 
+    # add new TranslatedWord for each translation
+    for trans in translations:
+
+        # if trans in ['george', 'joe', 'frank', 'tom', 'sam', 'john', 'david', 'michael', 'ah', 'ok', 'eh', 'dr', 'oh', "hey"]:
+        #     continue
+        if is_clean_trans(trans, word.text):
             new_trans = TranslatedWord(
-                word=original,
+                word=word,
                 language=dest_lang,
                 text=trans.lower()
             )
@@ -105,9 +134,14 @@ def add_word_translations(word, src_lang, dest_lang):
             db.session.add(new_trans)
             db.session.commit()
 
-    except Exception as e:
-        print('Word', word, 'encountered error while translating')
-        print("Error:", e)
+    return True
+
+
+def is_clean_trans(trans, word_text):
+    if trans[-1] == '.':
+        return False
+    if trans.lower() == word_text:
+        return False
 
     return True
 
@@ -156,7 +190,7 @@ def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
                     except Exception as e:
                         print("id", sentence_pair[0], "trans_id", sentence_pair[2],
                               "encountered an error")
-                        print(e)
+                        print(str(e))
                         continue
 
         end = time.time()
