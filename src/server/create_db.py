@@ -56,29 +56,28 @@ def parse_words_txt(words_file, src_lang, dest_lang, max):
 
     with open(words_file, 'r') as file:
         for line in file:
+
             # exit if max words reached
             if count >= max:
-                return True
+                end = time.time()
+                print("Parsing words took", end - start, "seconds")
+                return
 
             word, frequency = line.split(' ')
 
-            # continue if non-alpha word
-            if not word.isalpha():
-                continue
+            if word.isalpha():
+                # add word and translations
+                new_word = add_word(
+                    word=word, language=src_lang, freq=frequency
+                )
 
-            # add word and translations
-            new_word = add_word(word=word, language=src_lang, freq=frequency)
-            add_word_translations(
-                word=new_word,
-                src_lang=src_lang,
-                dest_lang=dest_lang
-            )
+                add_word_translations(
+                    word=new_word,
+                    src_lang=src_lang,
+                    dest_lang=dest_lang
+                )
 
-            count += 1
-
-    end = time.time()
-    print("Parsing words took", end - start, "seconds")
-    return True
+                count += 1
 
 
 def add_word(word, language, freq):
@@ -91,31 +90,17 @@ def add_word(word, language, freq):
 
 def add_word_translations(word, src_lang, dest_lang):
     # get translations list
-    try:
-        # call translate api
-        translations = ts.google(
-            word.text,
-            from_language=src_lang.code,
-            is_detail_result=True,
-            sleep_seconds=0.01
-        )[1][0][0]
-
-    except Exception as e:
-        print('Word', word, 'encountered error while translating')
-        print(e)
+    translations = get_translations(word, src_lang)
+    if not translations:
         return
 
-    # avoid google translate api bad format
-    if translations[-1] == src_lang.code:
-        remove_word(word)
-        return
-
-    translations = translations[-1][0][1]
-
-    num_trans = 0
+    did_add_word = False
 
     for trans in translations:
+
         if is_clean_trans(trans, word.text):
+
+            # add new translation
             new_trans = TranslatedWord(
                 word=word,
                 language=dest_lang,
@@ -125,13 +110,34 @@ def add_word_translations(word, src_lang, dest_lang):
             db.session.add(new_trans)
             db.session.commit()
 
-            num_trans += 1
+            if not did_add_word:
+                did_add_word = True
 
     # if no good translations, then delete bad word from db
-    if num_trans == 0:
+    if not did_add_word:
         remove_word(word)
 
-    return True
+
+def get_translations(word, src_lang):
+    try:
+        # call translate api
+        translations = ts.google(
+            word.text,
+            from_language=src_lang.code,
+            is_detail_result=True,
+            sleep_seconds=0.55
+        )[1][0][0]
+
+    except Exception as e:
+        print('Word', word, 'encountered error while translating\n', e)
+        return
+
+    # avoid google translate api bad format
+    if translations[-1] == src_lang.code:
+        remove_word(word)
+        return
+
+    return translations[-1][0][1]
 
 
 def remove_word(word):
