@@ -16,7 +16,7 @@ def main(words_file, sentences_file):
         words_file=words_file,
         src_lang=spanish,
         dest_lang=english,
-        max=1050
+        max=1100
     )
 
     # spanish = Language.query.filter_by(code='es').first()

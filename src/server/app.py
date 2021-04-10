@@ -15,7 +15,7 @@ def get_words(src_lang):
     # query from db
     language = Language.query.filter_by(name=src_lang).first()
     words = Word.query.filter_by(language=language).order_by(
-        Word.frequency.desc()).all()
+        Word.frequency.desc()).all()[:1000]
 
     # format dict
 
