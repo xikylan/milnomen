@@ -1,7 +1,8 @@
 from app import Language, Word, Sentence, TranslatedWord, TranslatedSentence, db
-import time
-import translators as ts
+from multiprocessing import Process
 import csv
+import translators as ts
+import time
 
 
 def main(words_file, sentences_file):
@@ -51,47 +52,84 @@ def add_new_lang(code, name):
 
 
 def parse_words_txt(words_file, src_lang, dest_lang, max):
-    count = 0
     start = time.time()
 
+    # read <= max words into an array
     with open(words_file, 'r') as file:
-        for line in file:
+        words_list = file.readlines()[:max]
 
-            # exit if max words reached
-            if count >= max:
-                end = time.time()
-                print("Parsing words took", end - start, "seconds")
-                return
+    # start processes
 
-            word, frequency = line.split(' ')
+    p1 = Process(target=convert_vocab, args=(
+        words_list[:max//4],
+        src_lang,
+        dest_lang
+    ))
 
-            if word.isalpha():
-                # add word and translations
-                new_word = add_word(
-                    word=word, language=src_lang, freq=frequency
-                )
+    p2 = Process(target=convert_vocab, args=(
+        words_list[max//4:max//2],
+        src_lang,
+        dest_lang
+    ))
 
-                add_word_translations(
-                    word=new_word,
-                    src_lang=src_lang,
-                    dest_lang=dest_lang
-                )
+    p3 = Process(target=convert_vocab, args=(
+        words_list[max//2:(max//4)*3],
+        src_lang,
+        dest_lang
+    ))
 
-                count += 1
+    p4 = Process(target=convert_vocab, args=(
+        words_list[(max//4)*3:],
+        src_lang,
+        dest_lang
+    ))
+
+    p1.start()
+    p2.start()
+    p3.start()
+    p4.start()
+
+    p1.join()
+    p2.join()
+    p3.join()
+    p4.join()
+
+    end = time.time()
+
+    print("Parsing vocab took", (end-start) / 60, "minutes")
+    print("Num words", len(words_list))
 
 
-def add_word(word, language, freq):
-    new_word = Word(text=word, language=language, frequency=freq)
+def convert_vocab(words_list, src_lang, dest_lang):
+    for pair in words_list:
+        word, frequency = pair.rstrip().split(' ')
+
+        if word.isalpha():
+            # add word and translations
+            new_word = add_word(
+                text=word, language=src_lang, freq=frequency
+            )
+
+            add_word_translations(
+                word=new_word,
+                src_lang=src_lang,
+                dest_lang=dest_lang
+            )
+
+
+def add_word(text, language, freq):
+    new_word = Word(text=text, language=language, frequency=freq)
     db.session.add(new_word)
     db.session.commit()
 
-    return Word.query.filter_by(language=language, text=word).first()
+    return Word.query.filter_by(language=language, text=text).first()
 
 
 def add_word_translations(word, src_lang, dest_lang):
     # get translations list
     translations = get_translations(word, src_lang)
     if not translations:
+        remove_word(word)
         return
 
     did_add_word = False
@@ -134,7 +172,6 @@ def get_translations(word, src_lang):
 
     # avoid google translate api bad format
     if translations[-1] == src_lang.code:
-        remove_word(word)
         return
 
     return translations[-1][0][1]
@@ -152,6 +189,8 @@ def is_clean_trans(trans, word_text):
     if trans[-1] == '.':
         return False
     if trans.lower() == word_text:
+        return False
+    if not trans.replace(' ', '').replace("'", '').isalpha():
         return False
 
     return True
@@ -264,4 +303,6 @@ def contains_word(arr, word):
     return False
 
 
-main('es.txt', 'es.tsv')
+if __name__ == '__main__':
+
+    main('es.txt', 'es.tsv')
