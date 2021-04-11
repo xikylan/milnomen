@@ -21,6 +21,7 @@ def get_words(src_lang):
 
     words_data = []
     rank = 1
+
     for word in words:
         word_info = {
             'rank': rank,
@@ -34,6 +35,39 @@ def get_words(src_lang):
         'data': {
             'count': len(words_data),
             'words': [wd for wd in words_data]
+        }
+    }
+
+    return jsonify(response)
+
+
+@app.route('/api/<src_lang>/sentences')
+def get_sentences(src_lang):
+    language = Language.query.filter_by(name=src_lang).first()
+    words = Word.query.filter_by(language=language).order_by(
+        Word.frequency.desc()).all()[:1000]
+
+    sentence_data = []
+
+    for word in words:
+        sentences = word.sentences
+        translations = []
+
+        for sentence in sentences:
+            trans = TranslatedSentence.query.filter_by(
+                sentence=sentence).first()
+            translations.append(trans)
+
+        sentence_info = {
+            'text': [s.text for s in sentences],
+            'translations': [tr.text for tr in translations if tr]
+        }
+        sentence_data.append(sentence_info)
+
+    response = {
+        'data': {
+            'count': len(sentence_data),
+            'sentences': [sd for sd in sentence_data]
         }
     }
 

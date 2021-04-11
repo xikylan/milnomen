@@ -115,4 +115,10 @@ def add_sentence_translation(sentence_pair, dest_lang):
     db.session.commit()
 
 
+def clear_sentences():
+    print("Deleting", Sentence.query.delete(), "sentences")
+    print("Deleting", TranslatedSentence.query.delete(), "translated sentences")
+    db.session.commit()
+
+
 main('es.tsv')
