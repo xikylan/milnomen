@@ -75,7 +75,7 @@ def convert_sentences(words_list, sentences, dest_lang, max):
             sentence = clean_sentence(orig_text.split(' '))
 
             # if sentence of len 10 contains this top word
-            if len(sentence) <= 10 and word.text in sentence:
+            if len(sentence) <= 7 and word.text in sentence:
                 try:
                     # add sentence + translation
                     new_sentence = add_sentence(
