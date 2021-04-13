@@ -1,7 +1,7 @@
 from app import Language, Word, TranslatedWord,  db
-from multiprocessing import Process
 import translators as ts
 import time
+import multiprocessing as mp
 
 
 def main(words_file):
@@ -24,52 +24,39 @@ def clear_words():
 
 
 def parse_words_txt(words_file, src_lang, dest_lang, max):
-    start = time.time()
 
     # read <= max words into an array
     with open(words_file, 'r') as file:
         words_list = file.readlines()[:max]
 
     # start processes
-
-    p1 = Process(target=convert_vocab, args=(
-        words_list[:max//4],
-        src_lang,
-        dest_lang
-    ))
-
-    p2 = Process(target=convert_vocab, args=(
-        words_list[max//4:max//2],
-        src_lang,
-        dest_lang
-    ))
-
-    p3 = Process(target=convert_vocab, args=(
-        words_list[max//2:(max//4)*3],
-        src_lang,
-        dest_lang
-    ))
-
-    p4 = Process(target=convert_vocab, args=(
-        words_list[(max//4)*3:],
-        src_lang,
-        dest_lang
-    ))
-
-    p1.start()
-    p2.start()
-    p3.start()
-    p4.start()
-
-    p1.join()
-    p2.join()
-    p3.join()
-    p4.join()
+    start = time.time()
+    split_tasks()
 
     end = time.time()
 
     print("Parsing vocab took", (end-start) / 60, "minutes")
     print("Num words", len(words_list))
+
+
+def split_tasks(top_words, src_lang, dest_lang):
+    num_cores = mp.cpu_count()
+    list_chunks = chunkify(top_words, num_cores)
+
+    pool = mp.Pool(num_cores)
+    for chunk in list_chunks:
+        pool.apply_async(convert_vocab, args=(
+            chunk,
+            src_lang,
+            dest_lang
+        ))
+
+    pool.close()
+    pool.join()
+
+
+def chunkify(word_list, num):
+    return (word_list[i:i+num] for i in range(0, len(word_list), num))
 
 
 def convert_vocab(words_list, src_lang, dest_lang):
@@ -100,14 +87,19 @@ def add_word(text, language, freq):
 def add_word_translations(word, src_lang, dest_lang):
     # get translations list
     translations = get_translations(word, src_lang)
+
+    # remove word if no translations available
     if not translations:
         remove_word(word)
         return
 
-    did_add_word = False
+    parse_translations(translations, word, dest_lang)
+
+
+def parse_translations(translations, word, dest_lang):
+    did_translate = False
 
     for trans in translations:
-
         if is_clean_trans(trans, word.text):
 
             # add new translation
@@ -120,11 +112,10 @@ def add_word_translations(word, src_lang, dest_lang):
             db.session.add(new_trans)
             db.session.commit()
 
-            if not did_add_word:
-                did_add_word = True
+            did_translate = True
 
     # if no good translations, then delete bad word from db
-    if not did_add_word:
+    if not did_translate:
         remove_word(word)
 
 

@@ -61,6 +61,7 @@ def chunkify(word_list, num):
 
 
 def convert_sentences(words_list, sentences, dest_lang, max):
+    max_length = 7
     for word in words_list:
         num_sentences = 0
 
@@ -69,33 +70,43 @@ def convert_sentences(words_list, sentences, dest_lang, max):
             if num_sentences >= max:
                 break
 
-            orig_id, orig_text, trans_id, trans_text = line.split('\t')
+            # parse sentence + translations
+            did_parse = parse_sentence(line, word, dest_lang, max_length)
+            if did_parse:
+                num_sentences += 1
 
-            # clean sentence
-            sentence = clean_sentence(orig_text.split(' '))
 
-            # if sentence of len 10 contains this top word
-            if len(sentence) <= 7 and word.text in sentence:
-                try:
-                    # add sentence + translation
-                    new_sentence = add_sentence(
-                        id=orig_id,
-                        text=orig_text,
-                        word=word
-                    )
+def parse_sentence(line, word, dest_lang, max_length):
+    # split sentence line
+    orig_id, orig_text, trans_id, trans_text = line.split('\t')
 
-                    if new_sentence:
-                        add_sentence_translation(
-                            id=orig_id,
-                            trans_id=trans_id,
-                            trans_sentence=trans_text,
-                            dest_lang=dest_lang
-                        )
-                        # increment number of sentences only if new one is added
-                        num_sentences += 1
+    # clean sentence
+    sentence = clean_sentence(orig_text.split(' '))
 
-                except Exception as e:
-                    print(str(e))
+    # check if sentence is valid
+    is_valid = len(sentence) <= max_length and word.text in sentence
+
+    # if sentence of len 10 contains this top word
+    if is_valid:
+        # add sentence + translation
+        did_add_new = add_sentence(
+            id=orig_id,
+            text=orig_text,
+            word=word
+        )
+
+        if did_add_new:
+            # add translation if add
+            add_sentence_translation(
+                id=orig_id,
+                trans_id=trans_id,
+                trans_sentence=trans_text,
+                dest_lang=dest_lang
+            )
+
+            return True
+
+    return False
 
 
 def clean_sentence(sentence):
@@ -120,6 +131,7 @@ def add_sentence(id, text, word):
         db.session.commit()
 
         return True
+
     return False
 
 
