@@ -47,14 +47,14 @@ def format_words_data(words):
 @app.route('/api/<src_lang>/sentences/<start>')
 def get_sentences_json(src_lang, start):
     # Query amount
-    query_amount = 5
+    query_amount = 10
 
     limit = get_query_limit(int(start), query_amount)
 
     # query from db
     language = Language.query.filter_by(name=src_lang).first()
     words = Word.query.filter_by(language=language).order_by(
-        Word.frequency.desc()).all()[start:limit]
+        Word.frequency.desc()).all()[int(start):limit]
 
     sentence_data = format_sentences_data(words)
 
@@ -72,7 +72,6 @@ def get_sentences_json(src_lang, start):
 def get_query_limit(start, query_amount):
     num_words = Word.query.count()
 
-    # If remaining sentences < query amount, return remaining instead
     next_query = start + query_amount
     leftover = num_words - start
 
