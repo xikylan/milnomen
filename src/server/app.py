@@ -53,8 +53,6 @@ def get_sentences(src_lang, index):
     words = Word.query.filter_by(language=language).order_by(
         Word.frequency.desc()).all()[start:limit]
 
-    print(words)
-
     sentence_data = []
 
     for word in words:
@@ -65,8 +63,6 @@ def get_sentences(src_lang, index):
             trans = TranslatedSentence.query.filter_by(
                 sentence=sentence).first()
             translations.append(trans)
-
-        print(sentences[0], sentences[-1])
 
         sentence_info = {
             'text': [s.text for s in sentences],
