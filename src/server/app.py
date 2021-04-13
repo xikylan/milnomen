@@ -72,6 +72,7 @@ def get_sentences_json(src_lang, start):
 def get_query_limit(start, query_amount):
     num_words = Word.query.count()
 
+    # next n queries, or whatever is left
     next_query = start + query_amount
     leftover = num_words - start
 
