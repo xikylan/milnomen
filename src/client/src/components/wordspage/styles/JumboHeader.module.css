@@ -1,0 +1,27 @@
+.jumbo {
+  margin-bottom: 10px;
+}
+
+.jumbo h1 {
+  font-weight: bold;
+}
+
+.jumbo p {
+  font-size: 1rem;
+}
+
+.studybtn {
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 499px) {
+  .studybtn {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .studybtn {
+    width: 10vw;
+  }
+}

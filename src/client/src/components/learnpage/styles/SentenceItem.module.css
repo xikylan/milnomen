@@ -1,0 +1,16 @@
+.rank {
+  font-size: 0.75rem;
+  margin: 0;
+  color: #bbb;
+}
+
+.sentence {
+  margin: 0;
+  padding: 0;
+}
+
+.translation {
+  margin: 0;
+  padding: 0;
+  color: #a9a9a9;
+}
