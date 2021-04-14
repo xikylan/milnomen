@@ -2,6 +2,7 @@ from app import Language, Word, TranslatedWord,  db
 import translators as ts
 import time
 import multiprocessing as mp
+import math
 
 
 def main(words_file):
@@ -24,14 +25,14 @@ def clear_words():
 
 
 def parse_words_txt(words_file, src_lang, dest_lang, max):
-
     # read <= max words into an array
     with open(words_file, 'r') as file:
         words_list = file.readlines()[:max]
 
     # start processes
     start = time.time()
-    split_tasks()
+
+    split_tasks(words_list, src_lang, dest_lang)
 
     end = time.time()
 
@@ -41,7 +42,9 @@ def parse_words_txt(words_file, src_lang, dest_lang, max):
 
 def split_tasks(top_words, src_lang, dest_lang):
     num_cores = mp.cpu_count()
-    list_chunks = chunkify(top_words, num_cores)
+    chunk_size = math.ceil(len(top_words) / num_cores)
+
+    list_chunks = chunkify(top_words, chunk_size)
 
     pool = mp.Pool(num_cores)
     for chunk in list_chunks:
@@ -55,8 +58,8 @@ def split_tasks(top_words, src_lang, dest_lang):
     pool.join()
 
 
-def chunkify(word_list, num):
-    return (word_list[i:i+num] for i in range(0, len(word_list), num))
+def chunkify(word_list, increment):
+    return (word_list[i:i+increment] for i in range(0, len(word_list), increment))
 
 
 def convert_vocab(words_list, src_lang, dest_lang):
