@@ -17,6 +17,8 @@ export default function WordSelector({ srcLang, destLang }) {
   const [sentences, setSentences] = useState([]);
   const [firstLoad, setFirstLoad] = useState(true);
 
+  const maxRank = 999;
+
   useEffect(() => {
     function getWords() {
       fetch(`/api/${srcLang}/words`)
@@ -33,8 +35,8 @@ export default function WordSelector({ srcLang, destLang }) {
       fetch(`/api/${srcLang}/sentences/${sentences.length}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data.data);
           setSentences((oldArray) => [...oldArray, ...data.data.sentences]);
-          console.log("Length " + sentences.length);
         });
     }
     if (firstLoad) {
@@ -62,7 +64,9 @@ export default function WordSelector({ srcLang, destLang }) {
                 </Button>
                 <Button
                   className={styles.selectBtn}
-                  onClick={() => setRank(rank + 1)}
+                  onClick={() =>
+                    rank < maxRank ? setRank(rank + 1) : setRank(maxRank)
+                  }
                 >
                   &gt;
                 </Button>
