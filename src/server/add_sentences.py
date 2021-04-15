@@ -1,5 +1,6 @@
 from app import Language, Word, Sentence, TranslatedSentence, db
 import time
+import math
 import multiprocessing as mp
 
 
@@ -39,21 +40,21 @@ def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):
 
 
 def split_tasks(top_words, sentences, dest_lang, max):
-    num_cores = mp.cpu_count()
-    list_chunks = chunkify(top_words, num_cores)
+    num_workers = mp.cpu_count() - 1
+    chunk_size = math.ceil(len(top_words) / num_workers)
 
-    # Split processing to utilize all cores
-    pool = mp.Pool(num_cores)
-    for chunk in list_chunks:
-        pool.apply_async(convert_sentences, args=(
-            chunk,
-            sentences,
-            dest_lang,
-            max
-        ))
+    word_chunks = chunkify(top_words, chunk_size)
+    jobs = []
 
-    pool.close()
-    pool.join()
+    for chunk in word_chunks:
+        process = mp.Process(target=convert_sentences,
+                             args=(chunk, sentences, dest_lang, max))
+        process.start()
+        jobs.append(process)
+        time.sleep(1)
+
+    for job in jobs:
+        job.join()
 
 
 def chunkify(word_list, num):

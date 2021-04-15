@@ -1,4 +1,4 @@
-from app import Language, Word, TranslatedWord,  db
+from app import Language, Word, TranslatedWord, db
 import translators as ts
 import time
 import multiprocessing as mp
@@ -31,9 +31,7 @@ def parse_words_txt(words_file, src_lang, dest_lang, max):
 
     # start processes
     start = time.time()
-
     split_tasks(words_list, src_lang, dest_lang)
-
     end = time.time()
 
     print("Parsing vocab took", (end-start) / 60, "minutes")
@@ -41,42 +39,53 @@ def parse_words_txt(words_file, src_lang, dest_lang, max):
 
 
 def split_tasks(top_words, src_lang, dest_lang):
-    num_cores = mp.cpu_count()
-    chunk_size = math.ceil(len(top_words) / num_cores)
+    num_workers = mp.cpu_count() - 1
+    chunk_size = math.ceil(len(top_words) / num_workers)
 
-    list_chunks = chunkify(top_words, chunk_size)
+    word_chunks = chunkify(top_words, chunk_size)
+    jobs = []
 
-    pool = mp.Pool(num_cores)
-    for chunk in list_chunks:
-        pool.apply_async(convert_vocab, args=(
-            chunk,
-            src_lang,
-            dest_lang
-        ))
+    for chunk in word_chunks:
+        process = mp.Process(target=convert_vocab,
+                             args=(chunk, src_lang, dest_lang))
+        process.start()
+        jobs.append(process)
+        time.sleep(1)
 
-    pool.close()
-    pool.join()
+    for job in jobs:
+        job.join()
+
+    # with mp.Pool(processes=num_workers) as pool:
+    #     for chunk in word_chunks:
+    #         result = pool.apply_async(
+    #             convert_vocab, (chunk, src_lang, dest_lang))
+
+    # pool = mp.Pool(num_workers)
+    # for chunk in word_chunks:
+    #     pool.apply_async(convert_vocab, args=(
+    #         chunk,
+    #         src_lang,
+    #         dest_lang
+    #     ))
+
+    # pool.close()
+    # pool.join()
 
 
 def chunkify(word_list, increment):
     return (word_list[i:i+increment] for i in range(0, len(word_list), increment))
 
 
-def convert_vocab(words_list, src_lang, dest_lang):
-    for pair in words_list:
+def convert_vocab(word_chunk, src_lang, dest_lang):
+    for pair in word_chunk:
         word, frequency = pair.rstrip().split(' ')
 
         if word.isalpha():
             # add word and translations
-            new_word = add_word(
-                text=word, language=src_lang, freq=frequency
-            )
+            new_word = add_word(text=word, language=src_lang, freq=frequency)
 
             add_word_translations(
-                word=new_word,
-                src_lang=src_lang,
-                dest_lang=dest_lang
-            )
+                word=new_word, src_lang=src_lang, dest_lang=dest_lang)
 
 
 def add_word(text, language, freq):
@@ -129,12 +138,12 @@ def get_translations(word, src_lang):
             word.text,
             from_language=src_lang.code,
             is_detail_result=True,
-            sleep_seconds=0.55
+            sleep_seconds=0.75
         )[1][0][0]
 
     except Exception as e:
         print('Word', word, 'encountered error while translating\n', e)
-        return
+        quit()
 
     # avoid google translate api bad format
     if translations[-1] == src_lang.code:

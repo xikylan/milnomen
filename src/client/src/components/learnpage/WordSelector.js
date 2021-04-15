@@ -76,10 +76,10 @@ export default function WordSelector({ srcLang, destLang }) {
           <Container>
             <h4>Examples</h4>
             <ListGroup variant="flush">
-              {sentences[rank].text.map((sen, key) => {
+              {sentences[rank].text.map((text, key) => {
                 return (
                   <SentenceItem
-                    sentence={sen}
+                    sentence={text}
                     translation={sentences[rank].translations[key]}
                     rank={key + 1}
                     key={key}
