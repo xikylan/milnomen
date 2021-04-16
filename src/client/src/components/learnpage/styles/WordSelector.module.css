@@ -1,17 +1,15 @@
-.progress {
-  height: 10px;
-}
-
-.selectBtn {
-}
-
 @media screen and (max-width: 499px) {
   .btnContainer {
     display: flex;
     justify-content: space-around;
   }
   .selectBtn {
-    width: 49%;
+    width: 48vw;
+    margin: 2px;
+  }
+  .progress {
+    height: 10px;
+    margin-top: 20px;
   }
 }
 
@@ -21,9 +19,12 @@
     justify-content: flex-end;
   }
   .selectBtn {
-    color: #fafafa;
-    width: 9%;
-    margin: 1px;
+    width: 12vw;
+    margin: 2px;
+  }
+  .progress {
+    height: 10px;
+    margin-top: 30px;
   }
 }
 

@@ -7,8 +7,8 @@ export default function NavigationBar() {
   return (
     <Navbar className={styles.navbar} expand="lg">
       <Container>
-        <Navbar.Brand className={styles.brand} as={Link} to="/">
-          milnomen
+        <Navbar.Brand as={Link} to="/">
+          <div className={styles.brand}>milnomen</div>
         </Navbar.Brand>
       </Container>
     </Navbar>

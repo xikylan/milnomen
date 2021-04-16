@@ -53,6 +53,7 @@ export default function WordSelector({ srcLang, destLang }) {
         <>
           <Container>
             <ProgressBar
+              variant="warning"
               className={styles.progress}
               now={(rank * 100) / words.length}
             />
@@ -61,20 +62,24 @@ export default function WordSelector({ srcLang, destLang }) {
             <WordDisplay word={words[rank]} />
             <div className={styles.btnContainer}>
               <Button
+                size="lg"
+                variant="light"
                 className={styles.selectBtn}
                 disabled={rank > 0 ? false : true}
                 onClick={() => (rank > 0 ? setRank(rank - 1) : setRank(0))}
               >
-                &lt;
+                Back
               </Button>
               <Button
+                size="lg"
+                variant="warning"
                 className={styles.selectBtn}
                 disabled={rank < maxRank ? false : true}
                 onClick={() =>
                   rank < maxRank ? setRank(rank + 1) : setRank(maxRank)
                 }
               >
-                &gt;
+                Next
               </Button>
             </div>
             <hr />

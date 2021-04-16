@@ -6,17 +6,17 @@ import styles from "./styles/LanguageList.module.css";
 export default function LanguageList() {
   return (
     <>
-      <Container>
+      <Container className={styles.container}>
         <p className={styles.heading}>Choose a language</p>
-      </Container>
-      <Container className={styles.langlist}>
-        <ListGroup variant="flush">
-          <ListGroup.Item action>
-            <Link className="langtext" to="/es">
-              Spanish
-            </Link>
-          </ListGroup.Item>
-        </ListGroup>
+        <Container className={styles.langlist}>
+          <ListGroup variant="flush">
+            <ListGroup.Item action>
+              <Link className="langtext" to="/es">
+                Spanish
+              </Link>
+            </ListGroup.Item>
+          </ListGroup>
+        </Container>
       </Container>
     </>
   );

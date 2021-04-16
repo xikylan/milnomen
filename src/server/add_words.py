@@ -55,21 +55,6 @@ def split_tasks(top_words, src_lang, dest_lang):
     for job in jobs:
         job.join()
 
-    # with mp.Pool(processes=num_workers) as pool:
-    #     for chunk in word_chunks:
-    #         result = pool.apply_async(
-    #             convert_vocab, (chunk, src_lang, dest_lang))
-
-    # pool = mp.Pool(num_workers)
-    # for chunk in word_chunks:
-    #     pool.apply_async(convert_vocab, args=(
-    #         chunk,
-    #         src_lang,
-    #         dest_lang
-    #     ))
-
-    # pool.close()
-    # pool.join()
 
 
 def chunkify(word_list, increment):

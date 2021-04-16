@@ -1,19 +1,23 @@
 .actionbtn {
   margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
-.jumboheader {
-  background-color: #eaeaea;
+.textcontainer {
+  background-color: #17a2b8;
+  color: #fff;
+  text-align: center;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 0;
 }
 
 @media screen and (min-width: 500px) {
   .actionbtn {
     width: 20vw;
-  }
-
-  .textcontainer {
-    text-align: center;
   }
 
   .header {
@@ -34,10 +38,6 @@
 @media screen and (max-width: 499px) {
   .actionbtn {
     width: 100%;
-  }
-
-  .textcontainer {
-    text-align: center;
   }
 
   .header {
