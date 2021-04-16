@@ -1,3 +1,13 @@
 .translations {
   font-size: 1.5rem;
 }
+
+.langLabel {
+  font-size: 0.8rem;
+}
+
+@media screen and (max-width: 499px) {
+  .translations {
+    font-size: 1.3rem;
+  }
+}

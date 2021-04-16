@@ -47,7 +47,7 @@ def format_words_data(words):
 @app.route('/api/<src_lang>/sentences/<start>')
 def get_sentences_json(src_lang, start):
     # Query amount
-    query_amount = 10
+    query_amount = 20
 
     limit = get_query_limit(int(start), query_amount)
 

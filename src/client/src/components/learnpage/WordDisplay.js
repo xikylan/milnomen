@@ -5,11 +5,13 @@ export default function WordDisplay({ word }) {
   return (
     <>
       <p>#{word.rank}</p>
+      <p className={styles.langLabel}>SPANISH</p>
       <h1>{word.text}</h1>
-      <hr />
-      <p>English:</p>
-      <p className={styles.translations}>{word.translations.join(", ")}</p>
-      <hr />
+      <br />
+      <p className={styles.langLabel}>ENGLISH</p>
+      <p className={styles.translations}>
+        {word.translations.slice(0, 4).join(", ")}
+      </p>
     </>
   );
 }

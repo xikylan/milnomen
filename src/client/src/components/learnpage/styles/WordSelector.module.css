@@ -1,8 +1,32 @@
-.btnContainer {
-  display: flex;
-  justify-content: space-around;
+.progress {
+  height: 10px;
 }
 
 .selectBtn {
-  width: 49%;
+}
+
+@media screen and (max-width: 499px) {
+  .btnContainer {
+    display: flex;
+    justify-content: space-around;
+  }
+  .selectBtn {
+    width: 49%;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .btnContainer {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .selectBtn {
+    color: #fafafa;
+    width: 9%;
+    margin: 1px;
+  }
+}
+
+.headerContainer {
+  margin: 20px 0;
 }

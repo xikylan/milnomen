@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-  Jumbotron,
   Container,
   Button,
   Spinner,
   ListGroup,
+  ProgressBar,
 } from "react-bootstrap";
 import WordDisplay from "./WordDisplay";
 import SentenceItem from "./SentenceItem";
@@ -35,14 +35,14 @@ export default function WordSelector({ srcLang, destLang }) {
       fetch(`/api/${srcLang}/sentences/${sentences.length}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.data);
+          console.log(rank);
           setSentences((oldArray) => [...oldArray, ...data.data.sentences]);
         });
     }
     if (firstLoad) {
       setFirstLoad(false);
       getSentences();
-    } else if (rank === sentences.length - 1) {
+    } else if (rank === sentences.length - 5) {
       getSentences();
     }
   }, [srcLang, rank, sentences.length, firstLoad]);
@@ -51,30 +51,36 @@ export default function WordSelector({ srcLang, destLang }) {
     <>
       {words.length && sentences.length ? (
         <>
-          <Jumbotron fluid>
-            <Container>
-              <WordDisplay word={words[rank]} />
-              <div className={styles.btnContainer}>
-                <Button
-                  className={styles.selectBtn}
-                  disabled={rank > 0 ? false : true}
-                  onClick={() => (rank > 0 ? setRank(rank - 1) : setRank(0))}
-                >
-                  &lt;
-                </Button>
-                <Button
-                  className={styles.selectBtn}
-                  onClick={() =>
-                    rank < maxRank ? setRank(rank + 1) : setRank(maxRank)
-                  }
-                >
-                  &gt;
-                </Button>
-              </div>
-            </Container>
-          </Jumbotron>
           <Container>
-            <h4>Examples</h4>
+            <ProgressBar
+              className={styles.progress}
+              now={(rank * 100) / words.length}
+            />
+          </Container>
+          <Container className={styles.headerContainer}>
+            <WordDisplay word={words[rank]} />
+            <div className={styles.btnContainer}>
+              <Button
+                className={styles.selectBtn}
+                disabled={rank > 0 ? false : true}
+                onClick={() => (rank > 0 ? setRank(rank - 1) : setRank(0))}
+              >
+                &lt;
+              </Button>
+              <Button
+                className={styles.selectBtn}
+                disabled={rank < maxRank ? false : true}
+                onClick={() =>
+                  rank < maxRank ? setRank(rank + 1) : setRank(maxRank)
+                }
+              >
+                &gt;
+              </Button>
+            </div>
+            <hr />
+          </Container>
+          <Container>
+            <h4 style={{ fontSize: "1.3rem" }}>Examples</h4>
             <ListGroup variant="flush">
               {sentences[rank].text.map((text, key) => {
                 return (
