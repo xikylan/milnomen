@@ -8,19 +8,12 @@ def main(sentences_file):
     spanish = Language.query.filter_by(code='es').first()
     english = Language.query.filter_by(code='en').first()
 
-    clear_sentences()
     parse_sentences_tsv(
         sentences_file=sentences_file,
         src_lang=spanish,
         dest_lang=english,
         max=20
     )
-
-
-def clear_sentences():
-    print("Deleting", Sentence.query.delete(), "sentences")
-    print("Deleting", TranslatedSentence.query.delete(), "translated sentences")
-    db.session.commit()
 
 
 def parse_sentences_tsv(sentences_file, src_lang, dest_lang, max):

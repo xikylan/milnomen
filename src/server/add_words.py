@@ -6,22 +6,16 @@ import math
 
 
 def main(words_file):
-    spanish = Language.query.filter_by(code='es').first()
+    # spanish = Language.query.filter_by(code='es').first()
+    french = Language.query.filter_by(code='fr').first()
     english = Language.query.filter_by(code='en').first()
 
-    clear_words()
     parse_words_txt(
         words_file=words_file,
-        src_lang=spanish,
+        src_lang=french,
         dest_lang=english,
         max=1100
     )
-
-
-def clear_words():
-    print("Deleting", Word.query.delete(), "words")
-    print("Deleting", TranslatedWord.query.delete(), "translated words")
-    db.session.commit()
 
 
 def parse_words_txt(words_file, src_lang, dest_lang, max):
@@ -54,7 +48,6 @@ def split_tasks(top_words, src_lang, dest_lang):
 
     for job in jobs:
         job.join()
-
 
 
 def chunkify(word_list, increment):
@@ -157,4 +150,4 @@ def is_clean_trans(trans, word_text):
 
 
 if __name__ == '__main__':
-    main('es.txt')
+    main('fr.txt')
