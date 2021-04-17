@@ -7,6 +7,6 @@
 @media screen and (min-width: 500px) {
   .container {
     margin: 0 auto;
-    width: 70vw;
+    width: 70%;
   }
 }

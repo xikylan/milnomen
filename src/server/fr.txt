@@ -103,7 +103,6 @@ vraiment 423339
 voir 419803
 même 411247
 sa 408233
-oh 408070
 maintenant 402585
 tous 399645
 peut 393199
@@ -158,11 +157,9 @@ homme 236357
 viens 233234
 vrai 233001
 femme 232974
-ok 228115
 doit 227951
 veut 227166
 ans 225795
-m. 223793
 mal 219886
 chez 218436
 déjà 214718
@@ -220,7 +217,6 @@ papa 146818
 passe 144680
 aurais 143292
 problème 141208
-ah 140158
 peur 139829
 regarde 138016
 voulez 137416
@@ -235,7 +231,6 @@ trois 132625
 assez 132619
 famille 132352
 dû 132063
-eh 131788
 toutes 131387
 plaît 131162
 pourrait 130894
@@ -385,7 +380,6 @@ minutes 76229
 demandé 76129
 venez 76029
 devant 75940
-dr 75475
 enfin 75391
 arrêter 74860
 cause 74747
@@ -444,7 +438,6 @@ regardez 64586
 feu 64459
 journée 63963
 madame 63463
-hey 63364
 téléphone 62803
 près 62659
 affaires 62509
@@ -629,7 +622,6 @@ comprendre 42495
 allais 42452
 esprit 42339
 cool 42254
-mlle 42249
 marché 42176
 fous 42174
 laisse-moi 42013
@@ -657,7 +649,6 @@ bras 40381
 cul 40257
 prochaine 40242
 visage 39958
-h 39905
 meilleure 39793
 face 39743
 soirée 39649
@@ -682,7 +673,6 @@ sinon 38576
 erreur 38428
 new 38345
 ecoute 38316
-mr 38242
 rentre 38212
 rendez-vous 38209
 devait 38107
@@ -690,7 +680,6 @@ revenir 38040
 joue 37977
 pauvre 37944
 devenir 37910
-s 37881
 rencontrer 37801
 sort 37668
 commencer 37646

@@ -14,7 +14,7 @@ def main(words_file):
         words_file=words_file,
         src_lang=french,
         dest_lang=english,
-        max=1100
+        max=1200
     )
 
 
@@ -58,7 +58,7 @@ def convert_vocab(word_chunk, src_lang, dest_lang):
     for pair in word_chunk:
         word, frequency = pair.rstrip().split(' ')
 
-        if word.isalpha():
+        if word.replace("-", "").isalpha():
             # add word and translations
             new_word = add_word(text=word, language=src_lang, freq=frequency)
 

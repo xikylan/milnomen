@@ -11,11 +11,17 @@ function App() {
         <Route exact path="/">
           <HomePage />
         </Route>
-        <Route path="/es/learn">
+        <Route path="/spanish/learn">
           <LearnPage srcLang="spanish" destLang="english" />
         </Route>
-        <Route path="/es">
+        <Route path="/spanish">
           <WordsPage srcLang="spanish" destLang="english" />
+        </Route>
+        <Route path="/french/learn">
+          <LearnPage srcLang="french" destLang="english" />
+        </Route>
+        <Route path="/french">
+          <WordsPage srcLang="french" destLang="english" />
         </Route>
       </Switch>
     </Router>

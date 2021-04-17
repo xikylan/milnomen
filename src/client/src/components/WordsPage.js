@@ -11,7 +11,7 @@ export default function WordsPage({ srcLang, destLang }) {
       <NavigationBar />
       <div className={styles.container}>
         <JumboHeader srcLang={srcLang} destLang={destLang} />
-        <hr />
+	<hr/>
         <WordTable srcLang={srcLang} destLang={destLang} />
       </div>
     </>

@@ -8,8 +8,8 @@ export default function JumboHeader({ srcLang, destLang }) {
     <Container className={styles.jumbo}>
       <h1>Top 1000 {srcLang} words</h1>
       <p>Source: Open Subtitles 2018</p>
-      <Link to="/es/learn">
-        <Button size="lg" variant="warning" className={styles.studybtn}>
+      <Link to={`/${srcLang}/learn`}>
+        <Button variant="warning" className={styles.studybtn}>
           <span>Learn</span>
         </Button>
       </Link>

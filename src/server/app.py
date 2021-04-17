@@ -7,6 +7,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
+@app.route('/api/languages')
+def get_languages_json():
+    languages = Language.query.all()
+
+    response = {
+        'data': {
+            'count': len(languages),
+            'languages': [language.name for language in languages]
+        }
+    }
+
+    return jsonify(response)
+
+
 @app.route('/api/<src_lang>/words')
 def get_words_json(src_lang):
     # query words from db
@@ -126,9 +140,26 @@ class Word(db.Model):
         'language.id'), nullable=False)
 
     language = db.relationship('Language', backref='words', lazy=True)
+    translations = db.relationship(
+        "TranslatedWord", back_populates="word", passive_deletes=True)
 
     def __repr__(self):
         return '<Word %r>' % self.text
+
+
+class TranslatedWord(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(100), nullable=False)
+    word_id = db.Column(db.Integer, db.ForeignKey(
+        'word.id', ondelete="CASCADE"), nullable=False)
+    language_id = db.Column(db.Integer, db.ForeignKey(
+        'language.id'), nullable=False)
+
+    language = db.relationship('Language', lazy=True)
+    word = db.relationship("Word", back_populates="translations")
+
+    def __repr__(self):
+        return '<TranslatedWord %r>' % self.text
 
 
 class Sentence(db.Model):
@@ -141,21 +172,6 @@ class Sentence(db.Model):
 
     def __repr__(self):
         return '<Sentence %r...>' % self.text[:15]
-
-
-class TranslatedWord(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(100), nullable=False)
-    word_id = db.Column(db.Integer, db.ForeignKey(
-        'word.id'), nullable=False)
-    language_id = db.Column(db.Integer, db.ForeignKey(
-        'language.id'), nullable=False)
-
-    language = db.relationship('Language', lazy=True)
-    word = db.relationship('Word', backref='translations', lazy=True)
-
-    def __repr__(self):
-        return '<TranslatedWord %r>' % self.text
 
 
 class TranslatedSentence(db.Model):
