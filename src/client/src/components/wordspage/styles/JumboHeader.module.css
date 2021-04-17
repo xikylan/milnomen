@@ -14,14 +14,14 @@
   margin-top: 20px;
 }
 
-@media screen and (max-width: 499px) {
+@media screen and (max-width: 639px) {
   .studybtn {
     width: 100%;
   }
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 640px) {
   .studybtn {
-    width: 14%;
+    width: 10rem;
   }
 }

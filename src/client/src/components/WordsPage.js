@@ -1,19 +1,18 @@
 import React from "react";
+import { Container } from "react-bootstrap";
 import NavigationBar from "./NavigationBar";
 import JumboHeader from "./wordspage/JumboHeader";
 import WordTable from "./wordspage/WordTable";
-
-import styles from "./WordsPage.module.css";
 
 export default function WordsPage({ srcLang, destLang }) {
   return (
     <>
       <NavigationBar />
-      <div className={styles.container}>
+      <Container>
         <JumboHeader srcLang={srcLang} destLang={destLang} />
-	<hr/>
+        <hr />
         <WordTable srcLang={srcLang} destLang={destLang} />
-      </div>
+      </Container>
     </>
   );
 }

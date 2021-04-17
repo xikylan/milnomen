@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import styles from "./styles/WordTable.module.css";
 
 export default function WordTable({ srcLang, destLang }) {
@@ -17,27 +17,25 @@ export default function WordTable({ srcLang, destLang }) {
   }, [srcLang]);
 
   return (
-    <Container>
-      <Table striped borderless size="sm">
-        <thead>
-          <tr className={styles.tableheader}>
-            <th>#</th>
-            <th>{srcLang}</th>
-            <th>{destLang}</th>
-          </tr>
-        </thead>
-        <tbody className={styles.tablebody}>
-          {words.map((word, key) => {
-            return (
-              <tr key={key}>
-                <td>{word.rank}</td>
-                <td>{word.text}</td>
-                <td>{word.translations.slice(0, 3).join(", ")}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-    </Container>
+    <Table striped borderless size="sm">
+      <thead>
+        <tr className={styles.tableheader}>
+          <th>#</th>
+          <th>{srcLang}</th>
+          <th>{destLang}</th>
+        </tr>
+      </thead>
+      <tbody className={styles.tablebody}>
+        {words.map((word, key) => {
+          return (
+            <tr key={key}>
+              <td>{word.rank}</td>
+              <td>{word.text}</td>
+              <td>{word.translations.slice(0, 3).join(", ")}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </Table>
   );
 }

@@ -1,33 +1,30 @@
-@media screen and (max-width: 499px) {
+@media screen and (max-width: 599px) {
   .btnContainer {
     display: flex;
     justify-content: space-around;
   }
   .selectBtn {
-    width: 48vw;
+    width: 50%;
     margin: 2px;
-  }
-  .progress {
-    height: 10px;
-    margin-top: 20px;
   }
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 600px) {
   .btnContainer {
     display: flex;
     justify-content: flex-end;
   }
   .selectBtn {
-    width: 14%;
+    width: 10rem;
     margin: 2px;
-  }
-  .progress {
-    height: 10px;
-    margin-top: 30px;
   }
 }
 
 .headerContainer {
   margin: 20px 0;
+}
+
+.progress {
+  height: 10px;
+  margin-top: 20px;
 }

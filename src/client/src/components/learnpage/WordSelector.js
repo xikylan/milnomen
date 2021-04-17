@@ -51,14 +51,12 @@ export default function WordSelector({ srcLang, destLang }) {
     <>
       {words.length && sentences.length ? (
         <>
-          <Container>
-            <ProgressBar
-              variant="warning"
-              className={styles.progress}
-              now={(rank * 100) / words.length}
-            />
-          </Container>
-          <Container className={styles.headerContainer}>
+          <ProgressBar
+            variant="warning"
+            className={styles.progress}
+            now={(rank * 100) / words.length}
+          />
+          <div className={styles.headerContainer}>
             <WordDisplay word={words[rank]} />
             <div className={styles.btnContainer}>
               <Button
@@ -81,8 +79,8 @@ export default function WordSelector({ srcLang, destLang }) {
               </Button>
             </div>
             <hr />
-          </Container>
-          <Container>
+          </div>
+          <div>
             <h4 style={{ fontSize: "1.3rem" }}>Examples</h4>
             <ListGroup variant="flush">
               {sentences[rank].text.map((text, key) => {
@@ -96,7 +94,7 @@ export default function WordSelector({ srcLang, destLang }) {
                 );
               })}
             </ListGroup>
-          </Container>
+          </div>
         </>
       ) : (
         <div>

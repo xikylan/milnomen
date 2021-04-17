@@ -5,7 +5,7 @@ import styles from "./NavigationBar.module.css";
 
 export default function NavigationBar() {
   return (
-    <Navbar className={styles.navbar} expand="lg">
+    <Navbar bg="dark" expand="xl" className={styles.navbar}>
       <Container>
         <Navbar.Brand as={Link} to="/">
           <div className={styles.brand}>milnomen</div>

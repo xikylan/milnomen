@@ -4,7 +4,7 @@
 }
 
 .textcontainer {
-  background-color: #17a2b8;
+  background-color: #343a40;
   color: #fff;
   text-align: center;
   height: 80vh;
@@ -15,9 +15,9 @@
   margin-bottom: 0;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 599px) {
   .actionbtn {
-    width: 20vw;
+    width: 20rem;
   }
 
   .header {
@@ -35,7 +35,7 @@
   }
 }
 
-@media screen and (max-width: 499px) {
+@media screen and (max-width: 600px) {
   .actionbtn {
     width: 100%;
   }
