@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, ListGroup } from "react-bootstrap";
+import { Container, ButtonGroup, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "./styles/LanguageList.module.css";
 
@@ -23,16 +23,17 @@ export default function LanguageList() {
       <Container className={styles.container}>
         <p className={styles.heading}>Choose a language</p>
         <Container className={styles.langlist}>
-          <ListGroup variant="flush">
+          <ButtonGroup vertical>
             {languages.map((lang, key) => {
               return (
-                <Link key={key} className="langtext" to={`/${lang}`}>
-                  {lang}
-                </Link>
+                <Button key={key} variant="light">
+                  <Link className="langtext" to={`/${lang}`}>
+                    {lang}
+                  </Link>
+                </Button>
               );
             })}
-            <ListGroup.Item action></ListGroup.Item>
-          </ListGroup>
+          </ButtonGroup>
         </Container>
       </Container>
     </>

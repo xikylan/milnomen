@@ -2,3 +2,4 @@
 es.tsv
 .flaskenv
 /__pycache__
+/texts

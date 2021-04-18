@@ -60,6 +60,7 @@ export default function WordSelector({ srcLang, destLang }) {
             <WordDisplay word={words[rank]} />
             <div className={styles.btnContainer}>
               <Button
+                size="lg"
                 variant="light"
                 className={styles.selectBtn}
                 disabled={rank > 0 ? false : true}
@@ -68,6 +69,7 @@ export default function WordSelector({ srcLang, destLang }) {
                 Back
               </Button>
               <Button
+                size="lg"
                 variant="warning"
                 className={styles.selectBtn}
                 disabled={rank < maxRank ? false : true}

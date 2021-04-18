@@ -1,7 +1,7 @@
 @media screen and (max-width: 599px) {
   .btnContainer {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
   }
   .selectBtn {
     width: 50%;

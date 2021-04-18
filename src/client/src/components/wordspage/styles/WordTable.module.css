@@ -7,3 +7,7 @@
 .tableheader th:first-letter {
   text-transform: capitalize;
 }
+
+Table {
+  margin-top: 20px;
+}

@@ -8,10 +8,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.langtext {
   text-align: center;
+  text-transform: capitalize;
+  font-size: 1.2rem;
 }
 
 .container {

@@ -7,7 +7,6 @@
   background-color: #343a40;
   color: #fff;
   text-align: center;
-  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -15,7 +14,11 @@
   margin-bottom: 0;
 }
 
-@media screen and (min-width: 599px) {
+@media screen and (min-width: 600px) {
+  .textcontainer {
+    height: 70vh;
+  }
+
   .actionbtn {
     width: 20rem;
   }
@@ -35,7 +38,11 @@
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 599px) {
+  .textcontainer {
+    height: 100vh;
+  }
+
   .actionbtn {
     width: 100%;
   }
@@ -43,6 +50,10 @@
   .header {
     font-size: 3rem;
     font-weight: bold;
+  }
+
+  .subheader {
+    font-size: 2rem;
   }
 
   .subtext {

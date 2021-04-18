@@ -7,14 +7,15 @@ import math
 
 def main(words_file):
     # spanish = Language.query.filter_by(code='es').first()
-    french = Language.query.filter_by(code='fr').first()
+    # french = Language.query.filter_by(code='fr').first()
+    german = Language.query.filter_by(code='de').first()
     english = Language.query.filter_by(code='en').first()
 
     parse_words_txt(
         words_file=words_file,
-        src_lang=french,
+        src_lang=german,
         dest_lang=english,
-        max=1200
+        max=1100
     )
 
 
@@ -33,7 +34,7 @@ def parse_words_txt(words_file, src_lang, dest_lang, max):
 
 
 def split_tasks(top_words, src_lang, dest_lang):
-    num_workers = mp.cpu_count() - 1
+    num_workers = mp.cpu_count()-1
     chunk_size = math.ceil(len(top_words) / num_workers)
 
     word_chunks = chunkify(top_words, chunk_size)
@@ -150,4 +151,4 @@ def is_clean_trans(trans, word_text):
 
 
 if __name__ == '__main__':
-    main('fr.txt')
+    main('texts/de.txt')
