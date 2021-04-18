@@ -8,12 +8,13 @@ import math
 def main(words_file):
     # spanish = Language.query.filter_by(code='es').first()
     # french = Language.query.filter_by(code='fr').first()
-    german = Language.query.filter_by(code='de').first()
+    # german = Language.query.filter_by(code='de').first()
+    italian = Language.query.filter_by(code='it').first()
     english = Language.query.filter_by(code='en').first()
 
     parse_words_txt(
         words_file=words_file,
-        src_lang=german,
+        src_lang=italian,
         dest_lang=english,
         max=1100
     )
@@ -30,7 +31,6 @@ def parse_words_txt(words_file, src_lang, dest_lang, max):
     end = time.time()
 
     print("Parsing vocab took", (end-start) / 60, "minutes")
-    print("Num words", len(words_list))
 
 
 def split_tasks(top_words, src_lang, dest_lang):
@@ -151,4 +151,4 @@ def is_clean_trans(trans, word_text):
 
 
 if __name__ == '__main__':
-    main('texts/de.txt')
+    main('texts/italian.txt')

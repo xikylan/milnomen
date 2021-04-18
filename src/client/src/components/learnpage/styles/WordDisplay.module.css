@@ -4,6 +4,7 @@
 
 .langLabel {
   font-size: 0.8rem;
+  text-transform: uppercase;
 }
 
 @media screen and (max-width: 599px) {

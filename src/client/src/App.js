@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import NavigationBar from "./components/NavigationBar";
-import HomePage from "./components/HomePage";
-import WordsPage from "./components/WordsPage";
-import LearnPage from "./components/LearnPage";
+import NavigationBar from "./components/global/NavigationBar";
+import HomePage from "./components/homepage/HomePage";
+import WordsPage from "./components/wordspage/WordsPage";
+import LearnPage from "./components/learnpage/LearnPage";
 
 function App() {
   return (
@@ -30,6 +30,12 @@ function App() {
         </Route>
         <Route path="/german">
           <WordsPage srcLang="german" destLang="english" />
+        </Route>
+        <Route path="/italian/learn">
+          <LearnPage srcLang="italian" destLang="english" />
+        </Route>
+        <Route path="/italian">
+          <WordsPage srcLang="italian" destLang="english" />
         </Route>
       </Switch>
     </Router>

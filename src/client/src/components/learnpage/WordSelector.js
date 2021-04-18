@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Button,
-  Spinner,
-  ListGroup,
-  ProgressBar,
-} from "react-bootstrap";
+import { Button, Spinner, ListGroup, ProgressBar } from "react-bootstrap";
 import WordDisplay from "./WordDisplay";
 import SentenceItem from "./SentenceItem";
 
@@ -20,30 +14,25 @@ export default function WordSelector({ srcLang, destLang }) {
   const maxRank = 999;
 
   useEffect(() => {
-    function getWords() {
-      fetch(`/api/${srcLang}/words`)
-        .then((res) => res.json())
-        .then((data) => {
-          setWords([...data.data.words]);
-        });
-    }
-    getWords();
-  }, [srcLang]);
+    fetch(`/api/${srcLang}/words`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("TRUE");
+        setWords([...data.data.words]);
+      })
+      .catch((error) => console.log(error.message));
+  }, [srcLang, words.length]);
 
   useEffect(() => {
-    function getSentences() {
+    if (rank === sentences.length - 5 || firstLoad) {
       fetch(`/api/${srcLang}/sentences/${sentences.length}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(rank);
+          console.log("TRUE");
           setSentences((oldArray) => [...oldArray, ...data.data.sentences]);
-        });
-    }
-    if (firstLoad) {
-      setFirstLoad(false);
-      getSentences();
-    } else if (rank === sentences.length - 5) {
-      getSentences();
+          setFirstLoad(false);
+        })
+        .catch((error) => console.log(error.message));
     }
   }, [srcLang, rank, sentences.length, firstLoad]);
 
@@ -57,7 +46,11 @@ export default function WordSelector({ srcLang, destLang }) {
             now={(rank * 100) / words.length}
           />
           <div className={styles.headerContainer}>
-            <WordDisplay word={words[rank]} />
+            <WordDisplay
+              word={words[rank]}
+              srcLang={srcLang}
+              destLang={destLang}
+            />
             <div className={styles.btnContainer}>
               <Button
                 size="lg"
