@@ -1,5 +1,7 @@
 /venv
-es.tsv
-.flaskenv
 /__pycache__
 /texts
+test.db
+test.tsv
+es.tsv
+.flaskenv
