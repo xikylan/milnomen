@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Button, Spinner, ListGroup, ProgressBar } from "react-bootstrap";
+import { Button, ListGroup, ProgressBar } from "react-bootstrap";
 import WordDisplay from "./WordDisplay";
 import SentenceItem from "./SentenceItem";
 
 import styles from "./styles/WordSelector.module.css";
+import LoadingScreen from "../global/LoadingScreen";
 
 export default function WordSelector({ srcLang, destLang }) {
   const [rank, setRank] = useState(0);
@@ -93,8 +94,7 @@ export default function WordSelector({ srcLang, destLang }) {
         </>
       ) : (
         <div>
-          Loading
-          <Spinner animation="border" />
+          <LoadingScreen />
         </div>
       )}
     </>
