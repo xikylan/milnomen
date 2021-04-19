@@ -7,6 +7,12 @@
     width: 50%;
     margin: 2px;
   }
+  .headerContainer {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }
 
 @media screen and (min-width: 600px) {
@@ -18,13 +24,15 @@
     width: 10rem;
     margin: 2px;
   }
-}
-
-.headerContainer {
-  margin: 20px 0;
+  .headerContainer {
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }
 
 .progress {
   height: 10px;
-  margin-top: 20px;
+  margin: 20px 0;
 }

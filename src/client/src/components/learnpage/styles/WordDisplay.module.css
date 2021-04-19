@@ -5,10 +5,12 @@
 .langLabel {
   font-size: 0.8rem;
   text-transform: uppercase;
+  color: #aaa;
+  font-weight: bold;
 }
 
-@media screen and (max-width: 599px) {
+/* @media screen and (max-width: 599px) {
   .translations {
     font-size: 1.3rem;
   }
-}
+} */

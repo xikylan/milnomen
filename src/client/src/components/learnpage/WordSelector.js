@@ -41,17 +41,19 @@ export default function WordSelector({ srcLang, destLang }) {
     <>
       {words.length && sentences.length ? (
         <>
-          <ProgressBar
-            variant="warning"
-            className={styles.progress}
-            now={(rank * 100) / words.length}
-          />
           <div className={styles.headerContainer}>
-            <WordDisplay
-              word={words[rank]}
-              srcLang={srcLang}
-              destLang={destLang}
+            <ProgressBar
+              variant="warning"
+              className={styles.progress}
+              now={(rank * 100) / words.length}
             />
+            <div>
+              <WordDisplay
+                word={words[rank]}
+                srcLang={srcLang}
+                destLang={destLang}
+              />
+            </div>
             <div className={styles.btnContainer}>
               <Button
                 size="lg"
@@ -74,8 +76,8 @@ export default function WordSelector({ srcLang, destLang }) {
                 Next
               </Button>
             </div>
-            <hr />
           </div>
+          <hr />
           <div>
             <h4 style={{ fontSize: "1.3rem" }}>Examples</h4>
             <ListGroup variant="flush">
