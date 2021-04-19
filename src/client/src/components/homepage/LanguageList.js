@@ -7,18 +7,14 @@ export default function LanguageList() {
   const [languages, setLanguages] = useState([]);
 
   useEffect(() => {
-    let isSubscribed = true;
     function getLanguages() {
       fetch("/api/languages")
         .then((res) => res.json())
         .then((data) => {
-          if (isSubscribed) {
-            setLanguages([...data.data.languages]);
-          }
+          setLanguages([...data.data.languages]);
         });
     }
     getLanguages();
-    return () => (isSubscribed = false);
   }, []);
 
   return (

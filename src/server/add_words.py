@@ -3,18 +3,23 @@ import translators as ts
 import time
 import multiprocessing as mp
 import math
+from sys import argv
 
 
-def main(words_file):
+def main():
     # spanish = Language.query.filter_by(code='es').first()
     # french = Language.query.filter_by(code='fr').first()
     # german = Language.query.filter_by(code='de').first()
-    italian = Language.query.filter_by(code='it').first()
+    # italian = Language.query.filter_by(code='it').first()
+    new_lang = Language.query.filter_by(name=argv[1]).first()
     english = Language.query.filter_by(code='en').first()
 
+    words_file = "./texts/" + argv[1] + '.txt'
+
+    print("Adding", argv[1], "words")
     parse_words_txt(
         words_file=words_file,
-        src_lang=italian,
+        src_lang=new_lang,
         dest_lang=english,
         max=1100
     )
@@ -151,4 +156,4 @@ def is_clean_trans(trans, word_text):
 
 
 if __name__ == '__main__':
-    main('texts/italian.txt')
+    main()

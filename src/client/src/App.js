@@ -37,6 +37,18 @@ function App() {
         <Route path="/italian">
           <WordsPage srcLang="italian" destLang="english" />
         </Route>
+        <Route path="/italian/learn">
+          <LearnPage srcLang="italian" destLang="english" />
+        </Route>
+        <Route path="/italian">
+          <WordsPage srcLang="italian" destLang="english" />
+        </Route>
+        <Route path="/dutch/learn">
+          <LearnPage srcLang="dutch" destLang="english" />
+        </Route>
+        <Route path="/dutch">
+          <WordsPage srcLang="dutch" destLang="english" />
+        </Route>
       </Switch>
     </Router>
   );
