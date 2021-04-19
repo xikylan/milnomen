@@ -23,4 +23,4 @@ for word in words:
     generate_audio(text)
 
 end = time.time()
-print("Generation audio took", end-start, "seconds")
+print("Generation audio took", (end-start) / 60, "minutes")
