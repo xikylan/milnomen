@@ -8,12 +8,12 @@ def main(sentences_file):
     # spanish = Language.query.filter_by(code='es').first()
     # french = Language.query.filter_by(code='fr').first()
     # german = Language.query.filter_by(code='de').first()
-    italian = Language.query.filter_by(code='it').first()
+    dutch = Language.query.filter_by(name='dutch').first()
     english = Language.query.filter_by(code='en').first()
 
     parse_sentences_tsv(
         sentences_file=sentences_file,
-        src_lang=italian,
+        src_lang=dutch,
         dest_lang=english,
         max=20
     )
@@ -148,4 +148,4 @@ def add_sentence_translation(id, trans_id, trans_sentence, dest_lang):
 
 
 if __name__ == '__main__':
-    main('texts/italian.tsv')
+    main('texts/dutch.tsv')
