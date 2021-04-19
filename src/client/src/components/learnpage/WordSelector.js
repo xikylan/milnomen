@@ -22,7 +22,7 @@ export default function WordSelector({ srcLang, destLang }) {
         setWords([...data.data.words]);
       })
       .catch((error) => console.log(error.message));
-  }, [srcLang, words.length]);
+  }, [srcLang]);
 
   useEffect(() => {
     if (rank === sentences.length - 5 || firstLoad) {
