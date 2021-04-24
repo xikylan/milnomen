@@ -2,18 +2,18 @@ from app import Language, Word, Sentence, TranslatedSentence, db
 import time
 import math
 import multiprocessing as mp
+from sys import argv
 
 
-def main(sentences_file):
-    # spanish = Language.query.filter_by(code='es').first()
-    # french = Language.query.filter_by(code='fr').first()
-    # german = Language.query.filter_by(code='de').first()
-    dutch = Language.query.filter_by(name='dutch').first()
+def main():
+    new_lang = Language.query.filter_by(name=argv[1]).first()
     english = Language.query.filter_by(code='en').first()
+
+    sentences_file = "./texts/" + argv[1] + '.tsv'
 
     parse_sentences_tsv(
         sentences_file=sentences_file,
-        src_lang=dutch,
+        src_lang=new_lang,
         dest_lang=english,
         max=20
     )
@@ -148,4 +148,4 @@ def add_sentence_translation(id, trans_id, trans_sentence, dest_lang):
 
 
 if __name__ == '__main__':
-    main('texts/dutch.tsv')
+    main()

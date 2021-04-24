@@ -9,6 +9,11 @@
   font-weight: bold;
 }
 
+.romanized {
+  color: #aaa;
+  font-size: 1.5rem;
+}
+
 /* @media screen and (max-width: 599px) {
   .translations {
     font-size: 1.3rem;

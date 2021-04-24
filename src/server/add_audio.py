@@ -3,6 +3,7 @@ from app import Language, Word
 from sys import argv
 import time
 
+
 name = argv[1]
 lang = Language.query.filter_by(name=name).first()
 words = Word.query.filter_by(language=lang).all()

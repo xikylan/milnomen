@@ -18,14 +18,14 @@ export default function WordSelector({ srcLang, destLang }) {
     fetch(`/api/${srcLang}/words`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("TRUE");
+        console.log("true");
         setWords([...data.data.words]);
       })
       .catch((error) => console.log(error.message));
   }, [srcLang]);
 
   useEffect(() => {
-    if (rank === sentences.length - 5 || firstLoad) {
+    if (firstLoad || rank === sentences.length - 5) {
       fetch(`/api/${srcLang}/sentences/${sentences.length}`)
         .then((res) => res.json())
         .then((data) => {
@@ -77,9 +77,9 @@ export default function WordSelector({ srcLang, destLang }) {
               </Button>
             </div>
           </div>
-          <hr />
+          <br />
           <div>
-            <h4 style={{ fontSize: "1.3rem" }}>Examples</h4>
+            {/* <h4 style={{ fontSize: "1.3rem" }}>Examples</h4> */}
             <ListGroup variant="flush">
               {sentences[rank].text.map((text, key) => {
                 return (

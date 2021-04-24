@@ -7,10 +7,6 @@ from sys import argv
 
 
 def main():
-    # spanish = Language.query.filter_by(code='es').first()
-    # french = Language.query.filter_by(code='fr').first()
-    # german = Language.query.filter_by(code='de').first()
-    # italian = Language.query.filter_by(code='it').first()
     new_lang = Language.query.filter_by(name=argv[1]).first()
     english = Language.query.filter_by(code='en').first()
 
@@ -21,7 +17,7 @@ def main():
         words_file=words_file,
         src_lang=new_lang,
         dest_lang=english,
-        max=1100
+        max=1250
     )
 
 
@@ -41,7 +37,6 @@ def parse_words_txt(words_file, src_lang, dest_lang, max):
 def split_tasks(top_words, src_lang, dest_lang):
     num_workers = mp.cpu_count()-1
     chunk_size = math.ceil(len(top_words) / num_workers)
-
     word_chunks = chunkify(top_words, chunk_size)
     jobs = []
 
@@ -57,7 +52,8 @@ def split_tasks(top_words, src_lang, dest_lang):
 
 
 def chunkify(word_list, increment):
-    return (word_list[i:i+increment] for i in range(0, len(word_list), increment))
+    return (word_list[i:i+increment]
+            for i in range(0, len(word_list), increment))
 
 
 def convert_vocab(word_chunk, src_lang, dest_lang):
@@ -82,13 +78,18 @@ def add_word(text, language, freq):
 
 def add_word_translations(word, src_lang, dest_lang):
     # get translations list
-    translations = get_translations(word, src_lang)
+    trans_query = get_translations(word, src_lang)
 
     # remove word if no translations available
-    if not translations:
+    if not trans_query:
         remove_word(word)
         return
 
+    romanized = trans_query[0][0]
+
+    # update romanization???
+    word.romanized = romanized
+    translations = trans_query[1][0][0][-1][0][1]
     parse_translations(translations, word, dest_lang)
 
 
@@ -97,17 +98,14 @@ def parse_translations(translations, word, dest_lang):
 
     for trans in translations:
         if is_clean_trans(trans, word.text):
-
             # add new translation
             new_trans = TranslatedWord(
                 word=word,
                 language=dest_lang,
-                text=trans.lower()
+                text=trans.lower(),
             )
-
             db.session.add(new_trans)
             db.session.commit()
-
             did_translate = True
 
     # if no good translations, then delete bad word from db
@@ -117,23 +115,21 @@ def parse_translations(translations, word, dest_lang):
 
 def get_translations(word, src_lang):
     try:
-        # call translate api
         translations = ts.google(
             word.text,
             from_language=src_lang.code,
             is_detail_result=True,
             sleep_seconds=0.75
-        )[1][0][0]
-
+        )
     except Exception as e:
         print('Word', word, 'encountered error while translating\n', e)
         quit()
 
     # avoid google translate api bad format
-    if translations[-1] == src_lang.code:
+    if translations[1][0][0][-1] == src_lang.code:
         return
 
-    return translations[-1][0][1]
+    return translations
 
 
 def remove_word(word):
@@ -148,6 +144,8 @@ def is_clean_trans(trans, word_text):
     if trans[-1] == '.':
         return False
     if trans.lower() == word_text:
+        return False
+    if trans.isupper():
         return False
     if not trans.replace(' ', '').replace("'", '').isalpha():
         return False

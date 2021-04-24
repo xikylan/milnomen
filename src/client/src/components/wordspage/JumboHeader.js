@@ -3,7 +3,7 @@ import { Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "./styles/JumboHeader.module.css";
 
-export default function JumboHeader({ srcLang, destLang }) {
+export default function JumboHeader({ srcLang }) {
   return (
     <Container fluid className={styles.jumbo}>
       <Container>

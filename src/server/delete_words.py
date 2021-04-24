@@ -18,4 +18,5 @@ def main():
     db.session.commit()
 
 
-main()
+if __name__ == '__main__':
+    main()

@@ -66,5 +66,8 @@
         "unordered_set": "cpp",
         "utility": "cpp",
         "vector": "cpp"
-    }
+    },
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true
 }

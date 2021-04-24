@@ -39,7 +39,7 @@ export default function WordTable({ srcLang, destLang }) {
                 <tr key={key}>
                   <td>{word.rank}</td>
                   <td>{word.text}</td>
-                  <td>{word.translations.slice(0, 3).join(", ")}</td>
+                  <td>{word.translations.join(", ")}</td>
                 </tr>
               );
             })}

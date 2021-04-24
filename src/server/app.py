@@ -1,8 +1,9 @@
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test2.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -50,6 +51,7 @@ def format_words_data(words):
         word_info = {
             'rank': rank,
             'text': word.text,
+            'romanized': word.romanized,
             'translations': [wt.text for wt in word.translations]
         }
         words_data.append(word_info)
@@ -136,6 +138,7 @@ class Word(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(100), nullable=False)
     frequency = db.Column(db.Integer, nullable=False)
+    romanized = db.Column(db.String(100), nullable=True)
     language_id = db.Column(db.Integer, db.ForeignKey(
         'language.id'), nullable=False)
 
