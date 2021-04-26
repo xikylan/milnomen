@@ -4,6 +4,10 @@ from sys import argv
 lang = Language.query.filter_by(name=argv[1]).first()
 rare = []
 
+with open('deleted.txt', 'w') as file:
+    for w in rare:
+        file.write(w, "\n")
+
 
 words = Word.query.filter_by(language=lang).all()
 
@@ -34,4 +38,4 @@ for w in rare:
     db.session.delete(w)
     db.session.commit()
 
-print(Word.query.count(), lang.name, "words remaining")
+print(Word.query.filter_by(language=lang).count(), lang.name, "words remaining")

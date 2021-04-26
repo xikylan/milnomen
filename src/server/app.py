@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test2.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test3.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -136,9 +136,9 @@ class Language(db.Model):
 
 class Word(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(100), nullable=False)
+    text = db.Column(db.String(50), nullable=False)
     frequency = db.Column(db.Integer, nullable=False)
-    romanized = db.Column(db.String(100), nullable=True)
+    romanized = db.Column(db.String(50), nullable=True)
     language_id = db.Column(db.Integer, db.ForeignKey(
         'language.id'), nullable=False)
 
@@ -152,7 +152,7 @@ class Word(db.Model):
 
 class TranslatedWord(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(100), nullable=False)
+    text = db.Column(db.String(50), nullable=False)
     word_id = db.Column(db.Integer, db.ForeignKey(
         'word.id', ondelete="CASCADE"), nullable=False)
     language_id = db.Column(db.Integer, db.ForeignKey(
@@ -167,19 +167,19 @@ class TranslatedWord(db.Model):
 
 class Sentence(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(10_000), nullable=False)
+    text = db.Column(db.String(1000), nullable=False)
     tatoeba_id = db.Column(db.Integer, nullable=False)
     word_id = db.Column(db.Integer, db.ForeignKey('word.id'), nullable=False)
 
     word = db.relationship('Word', backref='sentences', lazy=True)
 
     def __repr__(self):
-        return '<Sentence %r...>' % self.text[:15]
+        return '<Sentence %r...>' % self.text[:20]
 
 
 class TranslatedSentence(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(10_000), nullable=False)
+    text = db.Column(db.String(1000), nullable=False)
     tatoeba_id = db.Column(db.Integer, nullable=False)
     sentence_id = db.Column(db.Integer, db.ForeignKey(
         'sentence.id'), nullable=False)
@@ -190,7 +190,7 @@ class TranslatedSentence(db.Model):
     sentence = db.relationship('Sentence', backref='translations', lazy=True)
 
     def __repr__(self):
-        return '<TranslatedSentence %r...>' % self.text[:15]
+        return '<TranslatedSentence %r...>' % self.text[:20]
 
 
 if __name__ == "__main__":

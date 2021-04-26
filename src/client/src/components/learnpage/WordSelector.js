@@ -6,7 +6,7 @@ import SentenceItem from "./SentenceItem";
 import styles from "./styles/WordSelector.module.css";
 import LoadingScreen from "../global/LoadingScreen";
 
-export default function WordSelector({ srcLang, destLang }) {
+export default function WordSelector({ srcLang, destLang, romanize }) {
   const [rank, setRank] = useState(0);
   const [words, setWords] = useState([]);
   const [sentences, setSentences] = useState([]);
@@ -52,6 +52,7 @@ export default function WordSelector({ srcLang, destLang }) {
                 word={words[rank]}
                 srcLang={srcLang}
                 destLang={destLang}
+                romanize={romanize}
               />
             </div>
             <div className={styles.btnContainer}>

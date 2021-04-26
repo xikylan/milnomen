@@ -145,8 +145,6 @@ def is_clean_trans(trans, word_text):
         return False
     if trans.lower() == word_text:
         return False
-    if trans.isupper():
-        return False
     if not trans.replace(' ', '').replace("'", '').isalpha():
         return False
 

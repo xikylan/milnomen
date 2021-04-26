@@ -20,40 +20,40 @@ function App() {
           <WordsPage srcLang="spanish" destLang="english" />
         </Route>
         <Route path="/french/learn">
-          <LearnPage srcLang="french" destLang="english" />
+          <LearnPage srcLang="french" destLang="english" romanize={false} />
         </Route>
         <Route path="/french">
-          <WordsPage srcLang="french" destLang="english" />
+          <WordsPage srcLang="french" destLang="english" romanize={false} />
         </Route>
         <Route path="/german/learn">
-          <LearnPage srcLang="german" destLang="english" />
+          <LearnPage srcLang="german" destLang="english" romanize={false} />
         </Route>
         <Route path="/german">
-          <WordsPage srcLang="german" destLang="english" />
+          <WordsPage srcLang="german" destLang="english" romanize={false} />
         </Route>
         <Route path="/italian/learn">
-          <LearnPage srcLang="italian" destLang="english" />
+          <LearnPage srcLang="italian" destLang="english" romanize={false} />
         </Route>
         <Route path="/italian">
-          <WordsPage srcLang="italian" destLang="english" />
+          <WordsPage srcLang="italian" destLang="english" romanize={false} />
         </Route>
         <Route path="/italian/learn">
-          <LearnPage srcLang="italian" destLang="english" />
+          <LearnPage srcLang="italian" destLang="english" romanize={false} />
         </Route>
         <Route path="/italian">
-          <WordsPage srcLang="italian" destLang="english" />
+          <WordsPage srcLang="italian" destLang="english" romanize={false} />
         </Route>
         <Route path="/dutch/learn">
-          <LearnPage srcLang="dutch" destLang="english" />
+          <LearnPage srcLang="dutch" destLang="english" romanize={false} />
         </Route>
         <Route path="/dutch">
-          <WordsPage srcLang="dutch" destLang="english" />
+          <WordsPage srcLang="dutch" destLang="english" romanize={false} />
         </Route>
         <Route path="/russian/learn">
-          <LearnPage srcLang="russian" destLang="english" />
+          <LearnPage srcLang="russian" destLang="english" romanize={true} />
         </Route>
         <Route path="/russian">
-          <WordsPage srcLang="russian" destLang="english" />
+          <WordsPage srcLang="russian" destLang="english" romanize={true} />
         </Route>
       </Switch>
     </Router>
