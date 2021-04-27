@@ -17,7 +17,7 @@ def main():
         words_file=words_file,
         src_lang=new_lang,
         dest_lang=english,
-        max=1250
+        max=1500
     )
 
 
