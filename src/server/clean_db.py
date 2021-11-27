@@ -38,4 +38,5 @@ for w in rare:
     db.session.delete(w)
     db.session.commit()
 
-print(Word.query.filter_by(language=lang).count(), lang.name, "words remaining")
+print(Word.query.filter_by(
+    language=lang).count(), lang.name, "words remaining")

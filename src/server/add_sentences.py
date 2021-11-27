@@ -1,4 +1,4 @@
-from app import Language, Word, Sentence, TranslatedSentence, db
+from .app import Language, Word, Sentence, TranslatedSentence, db
 import time
 import math
 import multiprocessing as mp
